@@ -84,7 +84,7 @@ public class Window extends JFrame {
         this.companies.add(company);
     }
 
-    private ArrayList<String> getCompanies() {
+    public ArrayList<String> getCompanies() {
         return this.companies;
     }
 
