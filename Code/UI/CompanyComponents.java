@@ -1,16 +1,19 @@
 package Code.UI;
 
-import  javax.swing.*;
+import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class CompanyComponents {
 
-    //TODO: Grid passend skalieren(Speziell für Zeitslots)
+    //TODO: Grid passend skalieren(Spalte Blockierte Zeitslots)
+    //TODO: Nur hh:mm zeitformate akzeptieren implementieren
     private ArrayList<String> companies = new ArrayList<>();
     private JFrame window;
-    public CompanyComponents(Window window){
+
+    public CompanyComponents(Window window) {
 
         this.window = window;
         this.companies = (window.getCompanies());
@@ -21,9 +24,19 @@ public class CompanyComponents {
     private JPanel createCompanyComponents() {
         JPanel companyPanel = new JPanel(new BorderLayout());
 
-        //Liste erstelen für Betriebe
-        JList<String> companyList = new JList<>(companies.toArray(new String[0]));
-        companyPanel.add(new JScrollPane(companyList), BorderLayout.CENTER);
+        //Erstelen Tabelle für Betriebe
+        String[] columnNames = {"Unternehmen", "Zeit"};
+        Object[][] data = new Object[companies.size()][2];
+        for (int i = 0; i < companies.size(); i++) {
+            data[i][0] = companies.get(i);
+            data[i][1] = "";
+        }
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        JTable companyTable = new JTable(tableModel);
+
+        companyTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+
+        companyPanel.add(new JScrollPane(companyTable), BorderLayout.CENTER);
 
         //Panel Buttons
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
@@ -34,32 +47,34 @@ public class CompanyComponents {
             String companyName = JOptionPane.showInputDialog(window, "Geben Sie den Namen des Unternehmens ein:");
             if (companyName != null && !companyName.isEmpty()) {
                 companies.add(companyName);
-                companyList.setListData(companies.toArray(new String[0])); // Liste aktualisieren
+                // Neue Zeile zur Tabelle hinzufügen
+                tableModel.addRow(new Object[]{companyName, ""});
             }
         });
 
         //Entfernen Button
         JButton deleteButton = new JButton("Betrieb löschen");
         deleteButton.addActionListener(e -> {
-            if (!companyList.isSelectionEmpty()) {
-                int selectedIndex = companyList.getSelectedIndex();
-                companies.remove(selectedIndex);
-                companyList.setListData(companies.toArray(new String[0])); // Liste aktualisieren
+            int selectedRow = companyTable.getSelectedRow();
+            if (selectedRow != -1) {
+                companies.remove(selectedRow);
+                // Zeile aus der Tabelle entfernen
+                tableModel.removeRow(selectedRow);
             } else {
                 JOptionPane.showMessageDialog(window, "Bitte wählen Sie ein Unternehmen zum Löschen aus.");
             }
         });
 
-        //TODO: Zeitangabe implementieren, momentan nur "Mock"
-
         // Button zum Angeben der Zeit
         JButton timeButton = new JButton("Zeit angeben");
         timeButton.addActionListener(e -> {
-            // Hier implementieren Sie die Logik zum Angeben der Zeit für das ausgewählte Unternehmen
-            if (!companyList.isSelectionEmpty()) {
-                String selectedCompany = companyList.getSelectedValue();
-                // Hier können Sie den Dialog oder die Eingabeaufforderung implementieren, um die Zeit anzugeben
-                JOptionPane.showMessageDialog(window, "Zeit für " + selectedCompany + " angeben.");
+            int selectedRow = companyTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String time = JOptionPane.showInputDialog(window, "Geben Sie die Zeit für das Unternehmen ein:");
+                if (time != null) {
+                    // Zeit in der Tabelle aktualisieren
+                    tableModel.setValueAt(time, selectedRow, 1);
+                }
             } else {
                 JOptionPane.showMessageDialog(window, "Bitte wählen Sie ein Unternehmen aus, um die Zeit anzugeben.");
             }
@@ -75,8 +90,11 @@ public class CompanyComponents {
         companyPanel.add(buttonPanel, BorderLayout.EAST);
 
         // Company-Panel zum Hauptfenster hinzufügen
-        window.add(companyPanel, BorderLayout.CENTER);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(companyPanel, BorderLayout.CENTER);
+        window.add(mainPanel, BorderLayout.CENTER);
         window.revalidate();
 
         return companyPanel;
-    }}
+    }
+}
