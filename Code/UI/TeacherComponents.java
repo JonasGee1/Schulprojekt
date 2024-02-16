@@ -1,73 +1,119 @@
 package Code.UI;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TeacherComponents {
     private ArrayList<String> companies;
-    private Object[][] data = {
-            {"ITF213", "Hardel", "Marvin", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"},
-            {"ITF213", "Gerschau", "Jonas", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"},
-            {"ITF213", "Muelfarth", "Jan", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"}
-    };
+    private ArrayList<Object[]> data = new ArrayList<>();
     private Window window;
     private JPanel mainPanel;
+    private JTable studentsTable;
+    private DefaultTableModel tableModel;
 
     public TeacherComponents(ArrayList<String> companies, Window window) {
         this.companies = companies;
         this.window = window;
         createTeacherComponents();
+
+        //-------------- Testzweck-------------------
+        Object[][] initialData = {
+                {"ITF213", "Hardel", "Marvin", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"},
+                {"ITF213", "Gerschau", "Jonas", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"},
+                {"ITF213", "Muelfarth", "Jan", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"}
+        };
+        for (Object[] row : initialData) {
+            data.add(Arrays.copyOf(row, row.length)); // Add a copy of the row to data
+        }
+
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
+        //-------------- Testzweck-------------------
+
     }
 
     private void createTeacherComponents() {
-        mainPanel = new JPanel();
-        window.add(mainPanel);
+        mainPanel = new JPanel(new BorderLayout());
+        this.window.add(mainPanel);
 
-        JPanel teacherPanel = new JPanel();
-        mainPanel.add(teacherPanel);
-        mainPanel.add(getButtonsPanel());
+        JPanel teacherPanel = new JPanel(new BorderLayout());
+        mainPanel.add(teacherPanel, BorderLayout.WEST);
+        mainPanel.add(getButtonsPanel(), BorderLayout.CENTER);
 
         String[] columnNames = {"Klasse", "Name", "Vorname", "Wahl 1", "Wahl 2", "Wahl 3", "Wahl 4", "Wahl 5", "Wahl 6"};
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column >= 3;
-            }
-        };
+        this.tableModel = new DefaultTableModel(columnNames, 0);
 
-        JTable studentsTable = new JTable(tableModel);
-        addComboBoxesToTable(studentsTable, 3, 8);
-        teacherPanel.add(new JScrollPane(studentsTable));
+        this.studentsTable = new JTable(tableModel);
+        addComboBoxesToTable(this.studentsTable, 3, 8);
+        teacherPanel.add(new JScrollPane(this.studentsTable));
 
-        studentsTable.getTableHeader().setReorderingAllowed(false);
-        studentsTable.getTableHeader().setResizingAllowed(false);
+        this.studentsTable.getTableHeader().setReorderingAllowed(false);
+
+        this.tableModel.addTableModelListener(e -> {
+            this.onTableDataChanged(e);
+        });
     }
 
+    private void printData(){
+        System.out.println("Data:");
+        for(Object[] row : data){
+            for(Object cell : row){
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void onTableDataChanged(TableModelEvent e){
+        int row = e.getFirstRow();
+        int column = e.getColumn();
+        if (row >= 0 && column >= 0) {
+            Object newValue = this.tableModel.getValueAt(row, column);
+            if (row < data.size()) { // Update existing data if it exists
+                data.get(row)[column] = newValue;
+            } else { // If row doesn't exist in data, add new row
+                Object[] newRow = new Object[tableModel.getColumnCount()];
+                newRow[column] = newValue;
+                data.add(newRow);
+            }
+        }
+    }
     private void onBackButtonClick(){
-        this.removeAllComponents();
-        this.window.createPanel();
+        removeAllComponents();
+        window.createPanel();
     }
 
     private void onSaveButtonClick(){
-
+        printData();
     }
 
     private void onAddStudentsButtonClick(){
-
+        Object[] newRowData = new Object[this.tableModel.getColumnCount()];
+        this.tableModel.addRow(newRowData);
+        this.studentsTable.scrollRectToVisible(this.studentsTable.getCellRect(this.tableModel.getRowCount() - 1, 0, true));
     }
 
     private void onRemoveStudentsButtonClick(){
-
+        int selectedRow = this.studentsTable.getSelectedRow();
+        if(selectedRow != -1){
+            int modelRow = this.studentsTable.convertRowIndexToModel(selectedRow);
+            this.tableModel.removeRow(modelRow);
+        }
     }
 
     private void onCreateNewListButtonClick(){
-
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Neue Liste anlegen?", "Neue Liste", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_NO_OPTION){
+        }
     }
 
     private void onLoadListButtonClick(){
@@ -85,15 +131,14 @@ public class TeacherComponents {
     }
 
     private JPanel getButtonsPanel() {
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+        JPanel buttonsPanel = new JPanel(new GridLayout(6, 1, 5, 10));
 
-        buttonsPanel.add(createButton("Zurück", e -> { this.onBackButtonClick(); }));
-        buttonsPanel.add(createButton("Speichern", e -> { this.onSaveButtonClick(); }));
-        buttonsPanel.add(createButton("Schüler hinzufügen", e -> { this.onAddStudentsButtonClick(); }));
-        buttonsPanel.add(createButton("Schüler entfernen", e -> { this.onRemoveStudentsButtonClick(); }));
-        buttonsPanel.add(createButton("Neue Liste", e -> { this.onCreateNewListButtonClick(); }));
-        buttonsPanel.add(createButton("Liste Laden", e -> { this.onLoadListButtonClick(); }));
+        buttonsPanel.add(createButton("Liste Laden", e -> onLoadListButtonClick()));
+        buttonsPanel.add(createButton("Neue Liste", e -> onCreateNewListButtonClick()));
+        buttonsPanel.add(createButton("Schüler hinzufügen", e -> onAddStudentsButtonClick()));
+        buttonsPanel.add(createButton("Schüler entfernen", e -> onRemoveStudentsButtonClick()));
+        buttonsPanel.add(createButton("Speichern", e -> onSaveButtonClick()));
+        buttonsPanel.add(createButton("Zurück", e -> onBackButtonClick()));
 
         return buttonsPanel;
     }

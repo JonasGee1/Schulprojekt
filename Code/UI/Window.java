@@ -83,7 +83,7 @@ public class Window extends JFrame {
         this.remove(this.buttonsPanel);
         this.revalidate();
         this.repaint();
-        this.setSize(700, 500);
+        this.setSize(1000, 500);
     }
 
     private void addCompany(String company) {
