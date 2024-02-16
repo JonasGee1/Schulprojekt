@@ -19,6 +19,12 @@ public class Window extends JFrame {
         this.addCompany("Bundeswehr");
         this.addCompany("Puff");
 
+        this.createPanel();
+
+        this.setVisible(true);
+    }
+
+    public void createPanel(){
         this.buttonsPanel = this.createButtons();
         this.add(this.buttonsPanel);
 
