@@ -14,19 +14,24 @@ public class TeacherComponents {
     private Object[][] data = {{"ITF213", "Hardel", "Marvin", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"},
             {"ITF213", "Gerschau", "Jonas", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"},
             {"ITF213", "Muelfarth", "Jan", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr"}};
-    private JFrame window;
+    private Window window;
+    private JPanel mainPanel;
 
-    public TeacherComponents(ArrayList<String> companies, JFrame window){
+    public TeacherComponents(ArrayList<String> companies, Window window) {
         this.companies = companies;
         this.window = window;
 
         this.createTeacherComponents();
     }
 
-    private void createTeacherComponents(){
+    private void createTeacherComponents() {
+        this.mainPanel = new JPanel();
+        this.window.add(mainPanel);
+
         JPanel teacherPanel = new JPanel();
-        this.window.add(teacherPanel);
-        this.window.add(getButtonsPanel());
+
+        mainPanel.add(teacherPanel);
+        mainPanel.add(getButtonsPanel());
 
         String[] columnNames = {"Klasse", "Name", "Vorname", "Wahl 1", "Wahl 2", "Wahl 3", "Wahl 4", "Wahl 5", "Wahl 6"};
 
@@ -37,7 +42,7 @@ public class TeacherComponents {
 
     }
 
-    private JPanel getButtonsPanel(){
+    private JPanel getButtonsPanel() {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
@@ -45,11 +50,22 @@ public class TeacherComponents {
         buttonsPanel.add(this.createNewListButton());
         buttonsPanel.add(this.createAddStudentButton());
         buttonsPanel.add(this.createRemoveStudentButton());
+        buttonsPanel.add(this.createSaveButton());
+        buttonsPanel.add(this.createBackButton());
 
         return buttonsPanel;
     }
 
-    private JButton createSaveButton(){
+    private JButton createBackButton() {
+        JButton backButton = new JButton("Zurück");
+        backButton.addActionListener(event -> {
+            this.removeAllComponents();
+            this.window.createPanel();
+        });
+        return backButton;
+    }
+
+    private JButton createSaveButton() {
         JButton saveButton = new JButton("Speichen");
         saveButton.addActionListener(event -> {
 
@@ -57,7 +73,7 @@ public class TeacherComponents {
         return saveButton;
     }
 
-    private JButton createAddStudentButton(){
+    private JButton createAddStudentButton() {
         JButton addStudentButton = new JButton("Schüler hinzufügen");
         addStudentButton.addActionListener(event -> {
 
@@ -65,7 +81,7 @@ public class TeacherComponents {
         return addStudentButton;
     }
 
-    private JButton createRemoveStudentButton(){
+    private JButton createRemoveStudentButton() {
         JButton removeStudentButton = new JButton("Schüler entfernen");
         removeStudentButton.addActionListener(event -> {
 
@@ -73,7 +89,7 @@ public class TeacherComponents {
         return removeStudentButton;
     }
 
-    private JButton createNewListButton(){
+    private JButton createNewListButton() {
         JButton createListButton = new JButton("Neue Liste");
         createListButton.addActionListener(event -> {
 
@@ -81,19 +97,19 @@ public class TeacherComponents {
         return createListButton;
     }
 
-    private JButton createLoadListButton(){
+    private JButton createLoadListButton() {
 
         JButton loadListButton = new JButton("Liste Laden");
         loadListButton.addActionListener(event -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Datei auswählen");
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON-Dateien","json");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON-Dateien", "json");
             fileChooser.setFileFilter(filter);
 
             int userSelection = fileChooser.showOpenDialog(this.window);
 
-            if(userSelection == JFileChooser.APPROVE_OPTION){
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
                 File selecteFile = fileChooser.getSelectedFile();
                 System.out.println("Ausgewählte Datei: " + selecteFile.getName());
             }
@@ -101,7 +117,7 @@ public class TeacherComponents {
         return loadListButton;
     }
 
-    private void addComboBoxesToTable(JTable table, int startColumn, int endColumn){
+    private void addComboBoxesToTable(JTable table, int startColumn, int endColumn) {
         for (int i = startColumn; i <= endColumn; i++) {
             TableColumn column = table.getColumnModel().getColumn(i);
             column.setCellRenderer(new ComboBoxRenderer());
@@ -124,4 +140,9 @@ public class TeacherComponents {
         }
     }
 
+    private void removeAllComponents(){
+        this.window.remove(this.mainPanel);
+        this.window.revalidate();
+        this.window.repaint();
+    }
 }

@@ -19,15 +19,17 @@ public class Window extends JFrame{
         this.addCompany("Bundeswehr");
         this.addCompany("Puff");
 
+        this.createPanel();
 
+        this.setVisible(true);
+    }
+
+    public void createPanel(){
         this.buttonsPanel = this.createButtons();
         this.add(this.buttonsPanel);
-
         this.setLayout(new GridBagLayout());
         this.add(this.buttonsPanel, new GridBagConstraints());
-
         this.setSize(300, 150);
-        this.setVisible(true);
     }
 
     private JPanel createButtons(){
