@@ -34,10 +34,9 @@ public class Window extends JFrame{
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
+
         buttonPanel.add(this.createTeacherButton());
         buttonPanel.add(this.createCompanyButton());
-
-
 
         return buttonPanel;
     }
