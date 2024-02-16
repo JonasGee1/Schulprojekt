@@ -106,6 +106,6 @@ class FeldNummerUndSchueler {
         return name;
 
     }
-    //test
+    // Neuer Test
 }
 
