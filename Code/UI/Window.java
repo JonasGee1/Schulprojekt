@@ -1,17 +1,17 @@
 package Code.UI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.lang.reflect.Array;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
-public class Window extends JFrame{
-    ArrayList<String> companies = new ArrayList<>(); //FIXME: Später löschen. Ist nur zu Testzwecken, weil später die Daten im Backend liegen werden
+public class Window extends JFrame {
+    ArrayList<String> companies = new ArrayList<>();
     JPanel buttonsPanel;
-    public void create(){
+
+    public void create() {
         this.addCompany("Polizei");
         this.addCompany("RWTH");
         this.addCompany("Barbor");
@@ -27,23 +27,35 @@ public class Window extends JFrame{
     public void createPanel(){
         this.buttonsPanel = this.createButtons();
         this.add(this.buttonsPanel);
+
         this.setLayout(new GridBagLayout());
         this.add(this.buttonsPanel, new GridBagConstraints());
+
         this.setSize(300, 150);
+        this.setVisible(true);
+
+        // Füge einen WindowListener hinzu, um das Programm zu beenden, wenn das Fenster geschlossen wird
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Aufruf der Methode zum Beenden des Programms
+                closeWindow();
+            }
+        });
     }
 
-    private JPanel createButtons(){
+    private JPanel createButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-
         buttonPanel.add(this.createTeacherButton());
         buttonPanel.add(this.createCompanyButton());
+        buttonPanel.add(this.createCloseButton());
 
         return buttonPanel;
     }
 
-    private JButton createTeacherButton(){
+    private JButton createTeacherButton() {
         JButton teacherButton = new JButton("Lehrer");
         teacherButton.addActionListener(event -> {
             this.removeAllComponents();
@@ -52,27 +64,39 @@ public class Window extends JFrame{
         return teacherButton;
     }
 
-    private JButton createCompanyButton(){
-        JButton teacherButton = new JButton("Betrieb");
-        teacherButton.addActionListener(event -> {
+    private JButton createCompanyButton() {
+        JButton companyButton = new JButton("Betrieb");
+        companyButton.addActionListener(event -> {
             this.removeAllComponents();
             CompanyComponents companyComponents = new CompanyComponents(this);
         });
-        return teacherButton;
+        return companyButton;
     }
 
-    private void removeAllComponents(){
+    private JButton createCloseButton() {
+        JButton closeButton = new JButton("Schließen");
+        closeButton.addActionListener(e -> closeWindow());
+        return closeButton;
+    }
+
+    private void removeAllComponents() {
         this.remove(this.buttonsPanel);
         this.revalidate();
         this.repaint();
         this.setSize(700, 500);
     }
 
-    private void addCompany(String company){
+    private void addCompany(String company) {
         this.companies.add(company);
     }
 
-    private ArrayList<String> getCompanies (){
+    public ArrayList<String> getCompanies() {
         return this.companies;
+    }
+
+    // Methode zum Beenden des Programms
+    private void closeWindow() {
+        // Beenden des Programms
+        System.exit(0);
     }
 }
