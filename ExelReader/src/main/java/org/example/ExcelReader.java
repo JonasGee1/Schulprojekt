@@ -24,6 +24,7 @@ public class ExcelReader {
      *
      * @param args Die Befehlszeilenargumente (nicht verwendet).
      */
+    /**
     public static void main(String[] args) {
         List<List<String>> excelData = readExcel("C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx");
         // Excel
@@ -31,6 +32,7 @@ public class ExcelReader {
             System.out.println(row);
         }
     }
+     */
 
     /**
      * Diese Methode liest eine Excel-Datei ein und gibt deren Inhalt als Liste von Zeilen zurück.
