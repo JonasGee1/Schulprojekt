@@ -10,7 +10,8 @@ import java.util.Map;
 //Erstellung der Schülerklasse und der Summation der Wahlen
 
 public class Schueler {
-    private String schuelername;
+    private String nachName;
+    private String vorName;
     private String klasse;
     private int wahl1;
     private int wahl2;
@@ -19,19 +20,24 @@ public class Schueler {
     private int wahl5;
     private int wahl6;
 
-    public Schueler(String schuelername, String klasse, int wahl1, int wahl2, int wahl3, int wahl4, int wahl5, int wahl6) {
-        this.schuelername = schuelername;
+    public Schueler( String klasse, String nachName, String vorName, String wahl1, String wahl2, String wahl3, String wahl4, String wahl5, String wahl6) {
+        
         this.klasse = klasse;
-        this.wahl1 = wahl1;
-        this.wahl2 = wahl2;
-        this.wahl3 = wahl3;
-        this.wahl4 = wahl4;
-        this.wahl5 = wahl5;
-        this.wahl6 = wahl6;
+        this.nachName = nachName;
+        this.vorName = vorName;
+        this.wahl1 = Integer.parseInt(wahl1);
+        this.wahl2 = Integer.parseInt(wahl2);
+        this.wahl3 = Integer.parseInt(wahl3);
+        this.wahl4 = Integer.parseInt(wahl4);
+        this.wahl5 = Integer.parseInt(wahl5);
+        this.wahl6 = Integer.parseInt(wahl6);
     }
 
-    public String getSchuelername() {
-        return schuelername;
+    public String getnachName() {
+        return nachName;
+    }
+    public String getvorName(){
+        return vorName;
     }
 
     public String getKlasse() {
@@ -61,6 +67,10 @@ public class Schueler {
     public int getWahl6() {
         return wahl6;
     }
+
+    public String toString(){
+        return "Vorname: " + getnachName();
+    }
 }
 
 class SchuelerWahlSumme {
@@ -83,6 +93,27 @@ class SchuelerWahlSumme {
     @Override
     public String toString() {
         return "Summe: " + wahlSumme + ", Anzahl: " + counter;
+    }
+    public static List<Schueler> erstelleSchuelerList(ArrayList<String> stringListe) {
+        List<Schueler> schuelerList = new ArrayList<>();
+
+        for (String eintrag : stringListe) {
+            String[] daten = eintrag.split(",");
+            Schueler schueler = new Schueler(
+                    daten[0], // Klasse
+                    daten[1], // Nachname
+                    daten[2], // Vorname
+                    daten[3], // wahl1
+                    daten[4], // wahl2
+                    daten[5], // wahl3
+                    daten[6], // wahl4
+                    daten[7], // wahl5
+                    daten[8]  // wahl6
+            );
+            schuelerList.add(schueler);
+        }
+
+        return schuelerList;
     }
 }
 

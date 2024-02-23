@@ -1,6 +1,7 @@
 package Code.Backend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Zeitslots {
 
@@ -74,10 +75,8 @@ public class Zeitslots {
         setSlotD(slotD);
         setSlotE(slotE);
 
-
     }
 
-   
     public void fuegeSchuelerHinzu(Schueler schueler) {
         if (getAnzahlSchuelerInSlot(slotA) < 20) {
             slotA = updateSlot(slotA, schueler);
@@ -90,21 +89,21 @@ public class Zeitslots {
         } else if (getAnzahlSchuelerInSlot(slotE) < 20) {
             slotE = updateSlot(slotE, schueler);
         }
-        
+
     }
 
     private String updateSlot(String currentSlot, Schueler schueler) {
         if (currentSlot.isEmpty()) {
-            return schueler.getSchuelername();
+            return schueler.getnachName();
         } else {
-            return currentSlot + ", " + schueler.getSchuelername();
+            return currentSlot + ", " + schueler.getnachName();
         }
     }
-    
+
     public boolean slotIstFrei() {
-        return (getAnzahlSchuelerInSlot(slotA) < 20) || (getAnzahlSchuelerInSlot(slotB) < 20) || 
-               (getAnzahlSchuelerInSlot(slotC) < 20) || (getAnzahlSchuelerInSlot(slotD) < 20) || 
-               (getAnzahlSchuelerInSlot(slotE) < 20);
+        return (getAnzahlSchuelerInSlot(slotA) < 20) || (getAnzahlSchuelerInSlot(slotB) < 20) ||
+                (getAnzahlSchuelerInSlot(slotC) < 20) || (getAnzahlSchuelerInSlot(slotD) < 20) ||
+                (getAnzahlSchuelerInSlot(slotE) < 20);
     }
 
     private int getAnzahlSchuelerInSlot(String slot) {
@@ -113,4 +112,24 @@ public class Zeitslots {
         }
         return slot.split(",").length;
     }
+
+    public static List<Zeitslots> erstelleZeitslotliste(ArrayList<String> stringListe) {
+        List<Zeitslots> zeitslotliste = new ArrayList<>();
+
+        for (String eintrag : stringListe) {
+            String[] daten = eintrag.split(",");
+            Zeitslots zeitslots = new Zeitslots(
+                    daten[0], // Firma
+                    daten[1], // slotA
+                    daten[2], // slotB
+                    daten[3], // slotC
+                    daten[4], // slotD
+                    daten[5] // slotE
+            );
+            zeitslotliste.add(zeitslots);
+        }
+
+        return zeitslotliste;
+    }
+
 }
