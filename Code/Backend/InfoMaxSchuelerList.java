@@ -71,6 +71,7 @@ public class InfoMaxSchuelerList {
         List<Schueler> beispielListe = new ArrayList<Schueler>();
         beispielListe.add(new Schueler("ITF213", "Kopacz","Stan", "1", "2", "3", "4", "5", "6"));
         beispielListe.add(new Schueler("ITF213", "Duecker","Nick" ,"5", "2", "3", "4", "1", "6"));
+        beispielListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
         InfoMaxSchuelerList liste = new InfoMaxSchuelerList(beispielListe);
         liste.erstelleNeueListe();
         

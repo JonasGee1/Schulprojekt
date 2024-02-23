@@ -1,6 +1,5 @@
 package Code.Backend;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,7 +17,7 @@ public class ZeitslotsVerteilung {
    
     public void verteileSchuelerAufSlots() {
         // Sortiere die Schüler nach Wahl1 und dann nach Wahl2 absteigend
-        schuelerListe.sort(Comparator.comparing(Schueler::getWahl2).thenComparing(Schueler::getWahl1).reversed());
+        schuelerListe.sort(Comparator.comparingInt(Schueler::getWahl2).thenComparingInt(Schueler::getWahl1).reversed());
 
         for (Schueler schueler : schuelerListe) {
             // Suche nach einem freien Slot für den Schüler
@@ -64,7 +63,13 @@ public class ZeitslotsVerteilung {
         List<Schueler> beispielSchuelerListe = new ArrayList<>();
         beispielSchuelerListe.add(new Schueler("ITF213", "Kopacz","Stan", "1", "2", "3", "4", "5", "6"));
         beispielSchuelerListe.add(new Schueler("ITF213", "Duecker","Nick", "5", "2", "3", "4", "1", "6"));
-        
+        beispielSchuelerListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
+        beispielSchuelerListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
+        beispielSchuelerListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
+        beispielSchuelerListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
+       
+
+
         // Erstelle der Zeitslotsverteilung und Firmen
         List<Zeitslots> beispielZeitslotsListe = new ArrayList<>();
         beispielZeitslotsListe.add(new Zeitslots("1", "", "", "", "", ""));
