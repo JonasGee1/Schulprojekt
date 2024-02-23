@@ -12,7 +12,7 @@ public class Unternehmen {
     private String slotE;
     private int gruppenGroesse;
 
-    // Konstruktor
+    // Konstruktor für Unternehmen
     public Unternehmen(int firmenNr, String firmenName, String slotA, String slotB, String slotC, String slotD, String slotE, int gruppenGroesse) {
         this.firmenNr = firmenNr;
         this.firmenName = firmenName;
