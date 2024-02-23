@@ -94,9 +94,9 @@ public class Zeitslots {
 
     private String updateSlot(String currentSlot, Schueler schueler) {
         if (currentSlot.isEmpty()) {
-            return schueler.getSchuelername();
+            return schueler.getnachName();
         } else {
-            return currentSlot + ", " + schueler.getSchuelername();
+            return currentSlot + ", " + schueler.getnachName();
         }
     }
 

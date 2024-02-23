@@ -61,20 +61,19 @@ public class InfoMaxSchuelerList {
         
     }
 
+    public List<Schueler> getSchueler(){
+        return this.schuelerListe;
+    } 
+
  
     public static void main(String[] args) {
         // Beispiel-Daten aus der SchuelerVerarbeitung Klasse
-        List<Schueler> beispielListe = new ArrayList<>();
-        beispielListe.add(new Schueler("Max Mustermann", "Klasse A", 1, 3, 2, 4, 5, 6));
-        beispielListe.add(new Schueler("Anna Schmidt", "Klasse B", 1, 3, 4, 2, 7, 6));
-        beispielListe.add(new Schueler("Tom Mueller", "Klasse A", 2, 3, 1, 6, 5, 4));
-        beispielListe.add(new Schueler("Lisa Mayer", "Klasse C", 5, 6, 3, 1, 2, 4));
-        beispielListe.add(new Schueler("David Becker", "Klasse B", 4, 1, 2, 6, 5, 3));
-        beispielListe.add(new Schueler("Herbert Meyer", "Klasse B", 4, 1, 2, 6, 5, 3));
-
-        InfoMaxSchuelerList neueListeErstellung = new InfoMaxSchuelerList(beispielListe);
-        neueListeErstellung.erstelleNeueListe();
-    }
+        List<Schueler> beispielListe = new ArrayList<Schueler>();
+        beispielListe.add(new Schueler("ITF213", "Kopacz","Stan", "1", "2", "3", "4", "5", "6"));
+        beispielListe.add(new Schueler("ITF213", "Duecker","Nick" ,"5", "2", "3", "4", "1", "6"));
+        InfoMaxSchuelerList liste = new InfoMaxSchuelerList(beispielListe);
+        liste.erstelleNeueListe();
+        
 }
 
 class FeldNummerUndSchueler {
@@ -100,7 +99,7 @@ class FeldNummerUndSchueler {
         int i = 0;
         for(Schueler s : schueler){
         
-           name[i] = s.getSchuelername();
+           name[i] = s.getnachName();
            i++;
         }
         return name;
@@ -108,4 +107,4 @@ class FeldNummerUndSchueler {
     }
     // Neuer Test
 }
-
+}
