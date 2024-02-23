@@ -19,29 +19,22 @@ public class TeacherComponents {
     private JPanel mainPanel;
     private JTable studentsTable;
     private DefaultTableModel tableModel;
-
+    private JButton saveButton;
+    private JButton addStudentsButton;
+    private JButton removeStudentsButton;
     private String selectedFileName = "";
 
-    public TeacherComponents(ArrayList<String> companies, Window window) {
+    public TeacherComponents(ArrayList<String> companies, Window window, ArrayList<Object[]> data) {
         this.companies = companies;
         this.window = window;
-        createTeacherComponents();
+        this.data = data;
+        this.createTeacherComponents();
 
-        //-------------- Testzweck-------------------
-        Object[][] initialData = {
-                {"ITF213", "Hardel", "Marvin", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"},
-                {"ITF213", "Gerschau", "Jonas", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"},
-                {"ITF213", "Muelfarth", "Jan", "Polizei", "RWTH", "Barbor", "Feuerwehr", "Bundeswehr", "Puff"}
-        };
-        for (Object[] row : initialData) {
-            data.add(Arrays.copyOf(row, row.length)); // Add a copy of the row to data
+        if(this.data.isEmpty()){
+            this.saveButton.setEnabled(false);
+            this.addStudentsButton.setEnabled(false);
+            this.removeStudentsButton.setEnabled(false);
         }
-
-        for (Object[] row : data) {
-            tableModel.addRow(row);
-        }
-        //-------------- Testzweck-------------------
-
     }
 
     private void createTeacherComponents() {
@@ -55,6 +48,8 @@ public class TeacherComponents {
         String[] columnNames = {"Klasse", "Name", "Vorname", "Wahl 1", "Wahl 2", "Wahl 3", "Wahl 4", "Wahl 5", "Wahl 6"};
 
         this.tableModel = new DefaultTableModel(columnNames, 0);
+        this.tableModel.setDataVector(this.data.toArray(new Object[0][]), this.getColumNames());
+
 
         this.studentsTable = new JTable(tableModel);
         addComboBoxesToTable(this.studentsTable, 3, 8);
@@ -65,6 +60,10 @@ public class TeacherComponents {
         this.tableModel.addTableModelListener(e -> {
             this.onTableDataChanged(e);
         });
+
+        if(!this.data.isEmpty()) {
+            this.studentsTable.setRowSelectionInterval(this.data.size() - 1, this.data.size() - 1);
+        }
     }
 
     private void onTableDataChanged(TableModelEvent e){
@@ -83,17 +82,42 @@ public class TeacherComponents {
     }
     private void onBackButtonClick(){
         removeAllComponents();
+        window.setStudentsList(this.data);
         window.createPanel();
     }
 
     private void onSaveButtonClick() throws IOException {
-        this.saveJsonToFile();
+        if(this.isListComplete()){
+            this.saveJsonToFile();
+        } else {
+            int value = JOptionPane.showInternalConfirmDialog(null, "Liste ist nicht Komplett \nTrotzdem speichern?", "Warnung", JOptionPane.YES_NO_OPTION);
+            if(value == JOptionPane.YES_OPTION){
+                this.saveJsonToFile();
+            }
+        }
+
+
+    }
+
+    private boolean isListComplete(){
+        for(Object[] dataRow : this.data){
+            for(int i = 0; i < dataRow.length; i++){
+                if(dataRow[i] == null || dataRow[i].toString().trim().isEmpty()){
+                    return false;
+                }
+            }
+        }
+    return true;
     }
 
     private void onAddStudentsButtonClick(){
         Object[] newRowData = new Object[this.tableModel.getColumnCount()];
         this.tableModel.addRow(newRowData);
         this.studentsTable.scrollRectToVisible(this.studentsTable.getCellRect(this.tableModel.getRowCount() - 1, 0, true));
+        this.saveButton.setEnabled(true);
+
+        this.data.add(new Object[tableModel.getColumnCount()]);
+        this.studentsTable.setRowSelectionInterval(this.data.size()-1, this.data.size()-1);
     }
 
     private void onRemoveStudentsButtonClick(){
@@ -103,13 +127,29 @@ public class TeacherComponents {
                 int row = selectedRows[i];
                 int modelRow = this.studentsTable.convertRowIndexToModel(row);
                 this.tableModel.removeRow(modelRow);
+                this.data.remove(selectedRows[i]);
+                this.studentsTable.setRowSelectionInterval(row - 1, row - 1);
             }
+        }
+
+        if(this.data.isEmpty()){
+            this.saveButton.setEnabled(false);
         }
     }
 
     private void onCreateNewListButtonClick(){
         int dialogResult = JOptionPane.showConfirmDialog(null, "Neue Liste anlegen?", "Neue Liste", JOptionPane.YES_NO_OPTION);
         if(dialogResult == JOptionPane.YES_NO_OPTION){
+            this.data = new ArrayList<>();
+            tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
+            addComboBoxesToTable(this.studentsTable, 3, 8);
+            studentsTable.revalidate();
+            studentsTable.repaint();
+            this.onAddStudentsButtonClick();
+            this.studentsTable.setRowSelectionInterval(0, 0);
+
+            this.addStudentsButton.setEnabled(true);
+            this.removeStudentsButton.setEnabled(true);
         }
     }
 
@@ -122,6 +162,21 @@ public class TeacherComponents {
     private JPanel getButtonsPanel() {
         JPanel buttonsPanel = new JPanel(new GridLayout(6, 1, 5, 10));
 
+        this.addStudentsButton = createButton("Schüler hinzufügen", e -> onAddStudentsButtonClick());
+        buttonsPanel.add(this.addStudentsButton);
+
+        this.removeStudentsButton = createButton("Schüler entfernen", e -> onRemoveStudentsButtonClick());
+        buttonsPanel.add(this.removeStudentsButton);
+
+        buttonsPanel.add(createButton("Neue Liste", e -> onCreateNewListButtonClick()));
+        this.saveButton = createButton("Speichern", e -> {
+            try {
+                onSaveButtonClick();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        buttonsPanel.add(this.saveButton);
         buttonsPanel.add(createButton("Liste Laden", e -> {
             try {
                 this.onLoadListButtonClick();
@@ -129,16 +184,7 @@ public class TeacherComponents {
                 throw new RuntimeException(ex);
             }
         }));
-        buttonsPanel.add(createButton("Neue Liste", e -> onCreateNewListButtonClick()));
-        buttonsPanel.add(createButton("Schüler hinzufügen", e -> onAddStudentsButtonClick()));
-        buttonsPanel.add(createButton("Schüler entfernen", e -> onRemoveStudentsButtonClick()));
-        buttonsPanel.add(createButton("Speichern", e -> {
-            try {
-                onSaveButtonClick();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        }));
+
         buttonsPanel.add(createButton("Zurück", e -> onBackButtonClick()));
 
         return buttonsPanel;
@@ -276,8 +322,15 @@ public class TeacherComponents {
                 data.add(Arrays.copyOf(row, row.length));
             }
             tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
-            studentsTable.revalidate();
-            studentsTable.repaint();
+            addComboBoxesToTable(this.studentsTable, 3, 8);
+            this.studentsTable.revalidate();
+            this.studentsTable.repaint();
+            this.studentsTable.setRowSelectionInterval(this.data.size() - 1, this.data.size() - 1);
+
+            this.saveButton.setEnabled(true);
+            this.addStudentsButton.setEnabled(true);
+            this.removeStudentsButton.setEnabled(true);
+
 
             JOptionPane.showConfirmDialog(null, "List geladen!", "Liste geladen", JOptionPane.DEFAULT_OPTION);
         }
