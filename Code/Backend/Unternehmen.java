@@ -1,19 +1,23 @@
 package Code.Backend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Unternehmen {
-    private int firmenNr;
+
+    private List<String> unternehmensliste;
+
+    private String firmenNr;
     private String firmenName;
     private String slotA;
     private String slotB;
     private String slotC;
     private String slotD;
     private String slotE;
-    private int gruppenGroesse;
+    private String gruppenGroesse;
 
     // Konstruktor für Unternehmen
-    public Unternehmen(int firmenNr, String firmenName, String slotA, String slotB, String slotC, String slotD, String slotE, int gruppenGroesse) {
+    public Unternehmen(String firmenNr, String firmenName, String slotA, String slotB, String slotC, String slotD, String slotE, String gruppenGroesse) {
         this.firmenNr = firmenNr;
         this.firmenName = firmenName;
         this.slotA = slotA;
@@ -25,7 +29,7 @@ public class Unternehmen {
     }
 
     // Getter-Methoden
-    public int getFirmenNr() {
+    public String getFirmenNr() {
         return firmenNr;
     }
 
@@ -53,7 +57,30 @@ public class Unternehmen {
         return slotE;
     }
 
-    public int getGruppenGroesse() {
+    public String getGruppenGroesse() {
         return gruppenGroesse;
     }
+
+
+    public static List<Unternehmen> erstelleUnternehmensliste(ArrayList<String> stringListe) {
+        List<Unternehmen> unternehmensliste = new ArrayList<>();
+
+        for (String eintrag : stringListe) {
+            String[] daten = eintrag.split(",");
+            Unternehmen unternehmen = new Unternehmen(
+                    daten[0],  // FirmenNr
+                    daten[1],  // FirmenName
+                    daten[2],  // slotA
+                    daten[3],  // slotB
+                    daten[4],  // slotC
+                    daten[5],  // slotD
+                    daten[6],  // slotE
+                    daten[7]   // GruppenGroesse
+            );
+            unternehmensliste.add(unternehmen);
+        }
+
+        return unternehmensliste;
+    }
+
 }

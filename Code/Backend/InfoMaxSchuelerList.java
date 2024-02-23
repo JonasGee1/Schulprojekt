@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 
-public class NeueListeErstellung {
+public class InfoMaxSchuelerList {
 
     private List<Schueler> schuelerListe;
 
-    public NeueListeErstellung(List<Schueler> schuelerListe) {
+    public InfoMaxSchuelerList(List<Schueler> schuelerListe) {
         this.schuelerListe = schuelerListe;
     }
 
@@ -72,7 +72,7 @@ public class NeueListeErstellung {
         beispielListe.add(new Schueler("David Becker", "Klasse B", 4, 1, 2, 6, 5, 3));
         beispielListe.add(new Schueler("Herbert Meyer", "Klasse B", 4, 1, 2, 6, 5, 3));
 
-        NeueListeErstellung neueListeErstellung = new NeueListeErstellung(beispielListe);
+        InfoMaxSchuelerList neueListeErstellung = new InfoMaxSchuelerList(beispielListe);
         neueListeErstellung.erstelleNeueListe();
     }
 }
