@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 public class Window extends JFrame {
     ArrayList<String> companies = new ArrayList<>();
+    ArrayList<Object[]> studentsList = new ArrayList<>();
     JPanel buttonsPanel;
 
     public void create() {
@@ -17,11 +17,15 @@ public class Window extends JFrame {
         this.addCompany("Barbor");
         this.addCompany("Feuerwehr");
         this.addCompany("Bundeswehr");
-        this.addCompany("Puff");
+        this.addCompany("Simens");
 
         this.createPanel();
 
         this.setVisible(true);
+    }
+
+    public void setStudentsList(ArrayList<Object[]> studentsList) {
+        this.studentsList = studentsList;
     }
 
     public void createPanel(){
@@ -59,7 +63,7 @@ public class Window extends JFrame {
         JButton teacherButton = new JButton("Lehrer");
         teacherButton.addActionListener(event -> {
             this.removeAllComponents();
-            TeacherComponents teacherComponents = new TeacherComponents(this.companies, this);
+            TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList);
         });
         return teacherButton;
     }
@@ -83,7 +87,7 @@ public class Window extends JFrame {
         this.remove(this.buttonsPanel);
         this.revalidate();
         this.repaint();
-        this.setSize(700, 500);
+        this.setSize(1000, 500);
     }
 
     private void addCompany(String company) {
