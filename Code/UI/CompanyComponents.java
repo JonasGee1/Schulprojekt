@@ -1,7 +1,6 @@
 package Code.UI;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,17 +10,18 @@ public class CompanyComponents {
     //TODO: Grid passend skalieren(Spalte Blockierte Zeitslots)
     //TODO: Nur hh:mm zeitformate akzeptieren implementieren
     private ArrayList<String> companies = new ArrayList<>();
-    private JFrame window;
+    private Window window;
+    private JPanel mainPanel;
 
     public CompanyComponents(Window window) {
 
         this.window = window;
         this.companies = (window.getCompanies());
 
-        createCompanyComponents();
+        this.createCompanyComponents();
     }
 
-    private JPanel createCompanyComponents() {
+    private void createCompanyComponents() {
         JPanel companyPanel = new JPanel(new BorderLayout());
 
         //Erstelen Tabelle für Betriebe
@@ -80,21 +80,32 @@ public class CompanyComponents {
             }
         });
 
+        JButton backButton = new JButton("Zurück");
+        backButton.addActionListener(e -> {
+            this.removeAllComponents();
+            this.window.createPanel();
+        });
+
         // Buttons zum Button-Panel hinzufügen
         buttonPanel.add(addButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(timeButton);
+        buttonPanel.add(backButton);
 
 
         // Buttons-Panel zum Company-Panel hinzufügen
         companyPanel.add(buttonPanel, BorderLayout.EAST);
 
         // Company-Panel zum Hauptfenster hinzufügen
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(companyPanel, BorderLayout.CENTER);
-        window.add(mainPanel, BorderLayout.CENTER);
+        this.mainPanel = new JPanel(new BorderLayout());
+        this.mainPanel.add(companyPanel, BorderLayout.CENTER);
+        window.add(this.mainPanel, BorderLayout.CENTER);
         window.revalidate();
+    }
 
-        return companyPanel;
+    private void removeAllComponents() {
+        window.remove(this.mainPanel);
+        window.revalidate();
+        window.repaint();
     }
 }
