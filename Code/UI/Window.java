@@ -7,9 +7,10 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class Window extends JFrame {
-    ArrayList<String> companies = new ArrayList<>();
-    ArrayList<Object[]> studentsList = new ArrayList<>();
-    JPanel buttonsPanel;
+    private ArrayList<String> companies = new ArrayList<>();
+    private ArrayList<Object[]> studentsList = new ArrayList<>();
+    private JPanel buttonsPanel;
+    private String studentsListFilePath = "";
 
     public void create() {
         this.addCompany("Polizei");
@@ -20,7 +21,7 @@ public class Window extends JFrame {
         this.addCompany("Simens");
 
         this.createPanel();
-
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -63,7 +64,7 @@ public class Window extends JFrame {
         JButton teacherButton = new JButton("Lehrer");
         teacherButton.addActionListener(event -> {
             this.removeAllComponents();
-            TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList);
+            TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList, this.studentsListFilePath);
         });
         return teacherButton;
     }
@@ -102,5 +103,9 @@ public class Window extends JFrame {
     private void closeWindow() {
         // Beenden des Programms
         System.exit(0);
+    }
+
+    public void setStudentsListFilePath(String filePath){
+        this.studentsListFilePath = filePath;
     }
 }
