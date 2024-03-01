@@ -89,7 +89,13 @@ public class CompanyComponents {
                         new JCheckBox("08:00-08:45"),
                         new JCheckBox("08:45-09:30"),
                         new JCheckBox("09:50-10:35"),
-                        new JCheckBox("10:35-11:20")
+                        new JCheckBox("10:35-11:20"),
+                        new JCheckBox("11:40-12:25"),
+                        new JCheckBox("12:25-13:10"),
+                        new JCheckBox("13:25-14:10"),
+                        new JCheckBox("14:10-14:55"),
+                        new JCheckBox("15:05-15:50"),
+                        new JCheckBox("15:50-16:35")
                 };
 
                 for (JCheckBox checkBox : timeSlotsCheckBoxes) {
