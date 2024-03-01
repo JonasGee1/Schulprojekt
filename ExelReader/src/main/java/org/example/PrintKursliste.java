@@ -37,7 +37,7 @@ public class PrintKursliste {
 
             // Spaltenüberschriften erstellen
             Row headerRow = sheet.createRow(0);
-            String[] columns = {"Firma", "Raum", "Zeit", "Name des Schülers", "Unterschrift"};
+            String[] columns = {"Firma", "Raum", "Zeit", "Schülers", "Anwesend"};
 
             for (int i = 0; i < columns.length; i++) {
                 Cell cell = headerRow.createCell(i);
