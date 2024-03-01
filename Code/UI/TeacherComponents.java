@@ -1,5 +1,11 @@
 package Code.UI;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -215,7 +221,13 @@ public class TeacherComponents {
             }
         }));
 
-        this.printListButton = createButton("Drucken", e -> {
+        this.printListButton = createButton("Zu Excel", e -> {
+            try {
+                this.saveJsonToExcel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
 
         });
         buttonsPanel.add(this.printListButton);
@@ -224,6 +236,56 @@ public class TeacherComponents {
 
         return buttonsPanel;
     }
+
+
+    public void saveJsonToExcel() throws IOException {
+        // Erstellen eines neuen Excel-Arbeitsbuches
+        Workbook workbook = new XSSFWorkbook();
+
+        // Erstellen eines Arbeitsblatts im Arbeitsbuch
+        Sheet sheet = workbook.createSheet("Schülerliste");
+
+        // Erstellen einer Zeile für die Spaltenüberschriften
+        Row headerRow = sheet.createRow(0);
+
+        // Hinzufügen der Spaltenüberschriften
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(tableModel.getColumnName(i));
+        }
+
+        // Hinzufügen der Datenzeilen
+        for (int rowIndex = 0; rowIndex < tableModel.getRowCount(); rowIndex++) {
+            Row row = sheet.createRow(rowIndex + 1);
+            for (int colIndex = 0; colIndex < tableModel.getColumnCount(); colIndex++) {
+                Cell cell = row.createCell(colIndex);
+                Object value = tableModel.getValueAt(rowIndex, colIndex);
+                if (value != null) {
+                    cell.setCellValue(value.toString());
+                }
+            }
+        }
+
+        // Speichern des Arbeitsbuches in einer Datei
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel-Dateien", "xlsx"));
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            String filePath = file.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+            }
+            JOptionPane.showConfirmDialog(null, "Erfolgreich gespeichert!", "Gespeichert", JOptionPane.DEFAULT_OPTION);
+        }
+
+        // Schließen des Arbeitsbuches
+        workbook.close();
+    }
+
 
     private JButton createButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
