@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class PrintRaumUndZeitPlanung {
 
+    /**
     public static void main(String[] args) {
         // Beispielarrayliste erstellen (Nur als Platzhalter)
         List<List<String>> dataList = new ArrayList<>();
@@ -27,7 +28,7 @@ public class PrintRaumUndZeitPlanung {
 
         createExcel(dataList);
     }
-
+    */
 
     /**
      * Methode zum Erstellen einer Excel-Datei aus einer List von Daten.

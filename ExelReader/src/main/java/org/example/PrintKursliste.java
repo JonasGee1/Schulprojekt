@@ -15,7 +15,7 @@ import java.util.List;
  * @author [Dein Name]
  */
 public class PrintKursliste {
-    /**
+/**
     public static void main(String[] args) {
         // Beispielarrayliste erstellen (Nur als Platzhalter)
         List<List<String>> dataList = new ArrayList<>();
@@ -24,7 +24,7 @@ public class PrintKursliste {
         dataList.add(Arrays.asList("Zentis", "209", "C", "Anna Meier, Peter Schmitt"));
         createExcel(dataList);
     }
-    */
+*/
 
     /**
      * Methode zum Erstellen einer Excel-Datei aus einer Liste von Daten.
@@ -37,7 +37,7 @@ public class PrintKursliste {
 
             // Spaltenüberschriften erstellen
             Row headerRow = sheet.createRow(0);
-            String[] columns = {"Firma", "Raum", "Zeit", "Schülers", "Anwesend"};
+            String[] columns = {"Firma", "Raum", "Zeit", "Schüler", "Anwesend"};
 
             for (int i = 0; i < columns.length; i++) {
                 Cell cell = headerRow.createCell(i);
