@@ -10,7 +10,8 @@ public class JSONReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                line = line.trim().replaceAll("[\\[\\],]", "");
+                line = line.trim().replaceAll("[\\[\\]][{}]", "");
+                line = line.replaceAll(",", ",\n");
                 String[] keyValuePairs = line.split(",");
                 for (String pair : keyValuePairs) {
                     // Teile das Paar an den Doppelpunkten
@@ -29,6 +30,22 @@ public class JSONReader {
         }
         return dataList;
     }
+//    public static ArrayList<String> convertArrayList(ArrayList<String> input) {
+//        ArrayList<String> output = new ArrayList<>();
+//
+//        for (String entry : input) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("{\n");
+//            sb.append(entry.replaceAll("\\{\"", "{\n\t\"")
+//                    .replaceAll("\",\"", "\",\n\t\"")
+//                    .replaceAll("\": \"", "\": \"")
+//                    .replaceAll("\",", "\",\n"));
+//            sb.append("\n}");
+//            output.add(sb.toString());
+//        }
+//
+//        return output;
+//    }
 
 }
 
