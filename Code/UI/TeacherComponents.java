@@ -22,19 +22,32 @@ public class TeacherComponents {
     private JButton saveButton;
     private JButton addStudentsButton;
     private JButton removeStudentsButton;
-    private String selectedFileName = "";
+    private JButton printListButton;
+    private String selectedFilePath;
 
-    public TeacherComponents(ArrayList<String> companies, Window window, ArrayList<Object[]> data) {
+    public TeacherComponents(ArrayList<String> companies, Window window, ArrayList<Object[]> data, String selectedFilePath) {
         this.companies = companies;
         this.window = window;
         this.data = data;
+        this.selectedFilePath = selectedFilePath;
         this.createTeacherComponents();
 
-        if(this.data.isEmpty()){
+        if (this.data.isEmpty()) {
             this.saveButton.setEnabled(false);
             this.addStudentsButton.setEnabled(false);
+            this.printListButton.setEnabled(false);
+        }
+        if(this.data.size() == 1){
             this.removeStudentsButton.setEnabled(false);
         }
+
+        if(this.selectedFilePath.equals("") || this.selectedFilePath.isEmpty()){
+            this.createNewList();
+            this.selectedFilePath = "newList";
+            this.window.setStudentsListFilePath(this.selectedFilePath);
+        }
+
+        this.window.setLocationRelativeTo(null);
     }
 
     private void createTeacherComponents() {
@@ -61,12 +74,14 @@ public class TeacherComponents {
             this.onTableDataChanged(e);
         });
 
-        if(!this.data.isEmpty()) {
+        if (!this.data.isEmpty()) {
             this.studentsTable.setRowSelectionInterval(this.data.size() - 1, this.data.size() - 1);
+        } else {
+
         }
     }
 
-    private void onTableDataChanged(TableModelEvent e){
+    private void onTableDataChanged(TableModelEvent e) {
         int row = e.getFirstRow();
         int column = e.getColumn();
         if (row >= 0 && column >= 0) {
@@ -80,18 +95,21 @@ public class TeacherComponents {
             }
         }
     }
-    private void onBackButtonClick(){
+
+    private void onBackButtonClick() {
         removeAllComponents();
         window.setStudentsList(this.data);
         window.createPanel();
+        this.window.setLocationRelativeTo(null);
+
     }
 
     private void onSaveButtonClick() throws IOException {
-        if(this.isListComplete()){
+        if (this.isListComplete()) {
             this.saveJsonToFile();
         } else {
             int value = JOptionPane.showInternalConfirmDialog(null, "Liste ist nicht Vollständig. \nTrotzdem speichern?", "Warnung", JOptionPane.YES_NO_OPTION);
-            if(value == JOptionPane.YES_OPTION){
+            if (value == JOptionPane.YES_OPTION) {
                 this.saveJsonToFile();
             }
         }
@@ -99,31 +117,33 @@ public class TeacherComponents {
 
     }
 
-    private boolean isListComplete(){
-        for(Object[] dataRow : this.data){
-            for(int i = 0; i < dataRow.length; i++){
-                if(dataRow[i] == null || dataRow[i].toString().trim().isEmpty() || dataRow[i].toString().trim() == ""){
+    private boolean isListComplete() {
+        for (Object[] dataRow : this.data) {
+            for (int i = 0; i < dataRow.length; i++) {
+                if (dataRow[i] == null || dataRow[i].toString().trim().isEmpty() || dataRow[i].toString().trim() == "") {
                     return false;
                 }
             }
         }
-    return true;
+        return true;
     }
 
-    private void onAddStudentsButtonClick(){
+    private void onAddStudentsButtonClick() {
         Object[] newRowData = new Object[this.tableModel.getColumnCount()];
         this.tableModel.addRow(newRowData);
         this.studentsTable.scrollRectToVisible(this.studentsTable.getCellRect(this.tableModel.getRowCount() - 1, 0, true));
         this.saveButton.setEnabled(true);
+        this.removeStudentsButton.setEnabled(true);
 
         this.data.add(new Object[tableModel.getColumnCount()]);
-        this.studentsTable.setRowSelectionInterval(this.data.size()-1, this.data.size()-1);
+        this.studentsTable.setRowSelectionInterval(this.data.size() - 1, this.data.size() - 1);
     }
 
-    private void onRemoveStudentsButtonClick(){
+    private void onRemoveStudentsButtonClick() {
         int selectedRows[] = this.studentsTable.getSelectedRows();
-        if(selectedRows.length >= 1){
-            for(int i = selectedRows.length - 1; i >= 0; i--){
+
+        if (selectedRows.length >= 1) {
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
                 int row = selectedRows[i];
                 int modelRow = this.studentsTable.convertRowIndexToModel(row);
                 this.tableModel.removeRow(modelRow);
@@ -132,31 +152,41 @@ public class TeacherComponents {
             }
         }
 
-        if(this.data.isEmpty()){
-            this.saveButton.setEnabled(false);
+
+        if (this.data.size() == 1) {
+            this.removeStudentsButton.setEnabled(false);
         }
     }
 
-    private void onCreateNewListButtonClick(){
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Neue Liste anlegen?", "Neue Liste", JOptionPane.YES_NO_OPTION);
-        if(dialogResult == JOptionPane.YES_NO_OPTION){
-            this.data = new ArrayList<>();
-            tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
-            addComboBoxesToTable(this.studentsTable, 3, 8);
-            studentsTable.revalidate();
-            studentsTable.repaint();
-            this.onAddStudentsButtonClick();
-            this.studentsTable.setRowSelectionInterval(0, 0);
+    private void onCreateNewListButtonClick() {
+        if(this.selectedFilePath.equals("") || this.selectedFilePath.isEmpty()){
 
-            this.addStudentsButton.setEnabled(true);
-            this.removeStudentsButton.setEnabled(true);
+            this.createNewList();
+        } else {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Neue Liste anlegen?", "Neue Liste", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_NO_OPTION) {
+                this.createNewList();
+            }
         }
+    }
+
+    private void createNewList(){
+        this.data = new ArrayList<>();
+        tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
+        addComboBoxesToTable(this.studentsTable, 3, 8);
+        studentsTable.revalidate();
+        studentsTable.repaint();
+        this.onAddStudentsButtonClick();
+        this.studentsTable.setRowSelectionInterval(0, 0);
+
+        this.addStudentsButton.setEnabled(true);
+        this.removeStudentsButton.setEnabled(false);
+        this.printListButton.setEnabled(true);
     }
 
     private void onLoadListButtonClick() throws IOException {
         this.loadTextFromFile();
     }
-
 
 
     private JPanel getButtonsPanel() {
@@ -184,6 +214,11 @@ public class TeacherComponents {
                 throw new RuntimeException(ex);
             }
         }));
+
+        this.printListButton = createButton("Drucken", e -> {
+
+        });
+        buttonsPanel.add(this.printListButton);
 
         buttonsPanel.add(createButton("Zurück", e -> onBackButtonClick()));
 
@@ -222,7 +257,7 @@ public class TeacherComponents {
         window.repaint();
     }
 
-    private String createJSONOfData (){
+    private String createJSONOfData() {
         StringBuilder sb = new StringBuilder("[");
 
         for (Object[] row : this.data) {
@@ -249,7 +284,7 @@ public class TeacherComponents {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("JSON-Dateien", "json"));
         int result = fileChooser.showSaveDialog(null);
-        if(result == JFileChooser.APPROVE_OPTION){
+        if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             PrintWriter writer = new PrintWriter(file);
             writer.print(json);
@@ -263,9 +298,12 @@ public class TeacherComponents {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("JSON-Dateien", "json"));
 
+
         int result = fileChooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {
+            this.window.setStudentsListFilePath(fileChooser.getSelectedFile().getAbsolutePath());
+
             File file = fileChooser.getSelectedFile();
 
             FileReader reader = new FileReader(file);
@@ -335,6 +373,7 @@ public class TeacherComponents {
             JOptionPane.showConfirmDialog(null, "List geladen!", "Liste geladen", JOptionPane.DEFAULT_OPTION);
         }
     }
+
     private String[] getColumNames() {
         int columnCount = tableModel.getColumnCount();
         String[] columnNames = new String[columnCount];
