@@ -64,7 +64,7 @@ public class Window extends JFrame {
         JButton teacherButton = new JButton("Lehrer");
         teacherButton.addActionListener(event -> {
             this.removeAllComponents();
-            TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList, this.studentsListFilePath);
+                TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList, this.studentsListFilePath);
         });
         return teacherButton;
     }
