@@ -1,42 +1,40 @@
-//import java.io.FileReader;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class JsonReader {
-//
-//
-//
-//    public static List<String> readJsonToList(String filePath) {
-//        List<String> schuelerListe = new ArrayList<>();
-//        try {
-//            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-//            JSONArray jsonArray = new JSONArray(content);
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                StringBuilder schueler = new StringBuilder();
-//                schueler.append("Vorname: ").append(jsonObject.getString("Vorname")).append(", ");
-//                schueler.append("Nachname: ").append(jsonObject.getString("Nachname")).append(", ");
-//                schueler.append("Wahl1: ").append(jsonObject.getString("Wahl1")).append(", ");
-//                schueler.append("Wahl2: ").append(jsonObject.getString("Wahl2")).append(", ");
-//                schueler.append("Wahl3: ").append(jsonObject.getString("Wahl3")).append(", ");
-//                schueler.append("Wahl4: ").append(jsonObject.getString("Wahl4")).append(", ");
-//                schueler.append("Wahl5: ").append(jsonObject.getString("Wahl5")).append(", ");
-//                schueler.append("Wahl6: ").append(jsonObject.getString("Wahl6"));
-//                schuelerListe.add(schueler.toString());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return schuelerListe;
-//    }
-//}
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
+public class JSONReader {
+    public static ArrayList<String> readJSONFile(String filePath) {
+        ArrayList<String> dataList = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim().replaceAll("[\\[\\],]", "");
+                String[] keyValuePairs = line.split(",");
+                for (String pair : keyValuePairs) {
+                    // Teile das Paar an den Doppelpunkten
+                    String[] pairParts = pair.split(":");
+                    // Stelle sicher, dass das Key-Value-Paar korrekt ist
+                    if (pairParts.length == 2) {
+                        // Füge den Wert zur Liste hinzu (ohne Anführungszeichen)
+                        dataList.add(pairParts[1].trim().replaceAll("\"", ""));
+                    } else {
+                        System.err.println("Ungültiges Key-Value-Paar: " + pair);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+}
 
 
 /*public class JSONReader {
-    public static void readFile(String filePath){
+    public static void readFile(String filePath) {
         // Dateipfad zur JSON-Datei
 
         // ArrayList, um die Daten zu speichern

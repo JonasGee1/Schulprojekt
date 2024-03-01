@@ -1,15 +1,20 @@
+import java.util.ArrayList;
+
 public class ApiMain {
 
-//    public static void main(String[] args) {
-//        String filePath = "H:\\23-24\\GVI\\test.json";
-//        List<String> schuelerListe = readJsonToList(filePath);
-//        for (String schueler : schuelerListe) {
-//            System.out.println("Schueler: " + schueler);
-//        }
+    public static void main(String[] args) {
+        String filePath = "H:\\23-24\\GVI\\test.json";
+        ArrayList<String> data = JSONReader.readJSONFile(filePath);
+        // Ausgabe der Daten
+        for (String value : data) {
+            System.out.println(value);
+        }
+    }
 
 
-//    public static void main(String[] args) {
-//        String filePath = "H:\\23-24\\GVI\\test.json";
-//        System.out.println(JSONReader.readFile(filePath));
-//    }
-}
+/*        public static void main (String[]args){
+            String filePath = "H:\\23-24\\GVI\\test.json";
+            JSONReader.readFile(filePath);
+        }*/
+    }
+
