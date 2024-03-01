@@ -94,9 +94,9 @@ public class Zeitslots {
 
     private String updateSlot(String currentSlot, Schueler schueler) {
         if (currentSlot.isEmpty()) {
-            return schueler.getnachName();
+            return schueler.getnachName() + " " + schueler.getvorName();
         } else {
-            return currentSlot + ", " + schueler.getnachName();
+            return currentSlot + ", " + schueler.getnachName() + " " + schueler.getvorName();
         }
     }
 
@@ -124,7 +124,7 @@ public class Zeitslots {
                     daten[2], // slotB
                     daten[3], // slotC
                     daten[4], // slotD
-                    daten[5] // slotE
+                    daten[5]  // slotE
             );
             zeitslotliste.add(zeitslots);
         }
