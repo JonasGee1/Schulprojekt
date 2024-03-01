@@ -90,7 +90,7 @@ public class TeacherComponents {
         if(this.isListComplete()){
             this.saveJsonToFile();
         } else {
-            int value = JOptionPane.showInternalConfirmDialog(null, "Liste ist nicht Komplett \nTrotzdem speichern?", "Warnung", JOptionPane.YES_NO_OPTION);
+            int value = JOptionPane.showInternalConfirmDialog(null, "Liste ist nicht Vollständig. \nTrotzdem speichern?", "Warnung", JOptionPane.YES_NO_OPTION);
             if(value == JOptionPane.YES_OPTION){
                 this.saveJsonToFile();
             }
@@ -102,7 +102,7 @@ public class TeacherComponents {
     private boolean isListComplete(){
         for(Object[] dataRow : this.data){
             for(int i = 0; i < dataRow.length; i++){
-                if(dataRow[i] == null || dataRow[i].toString().trim().isEmpty()){
+                if(dataRow[i] == null || dataRow[i].toString().trim().isEmpty() || dataRow[i].toString().trim() == ""){
                     return false;
                 }
             }
@@ -122,7 +122,7 @@ public class TeacherComponents {
 
     private void onRemoveStudentsButtonClick(){
         int selectedRows[] = this.studentsTable.getSelectedRows();
-        if(selectedRows.length > 0){
+        if(selectedRows.length >= 1){
             for(int i = selectedRows.length - 1; i >= 0; i--){
                 int row = selectedRows[i];
                 int modelRow = this.studentsTable.convertRowIndexToModel(row);
@@ -225,13 +225,13 @@ public class TeacherComponents {
     private String createJSONOfData (){
         StringBuilder sb = new StringBuilder("[");
 
-        for (Object[] row : data) {
+        for (Object[] row : this.data) {
             sb.append("{");
-            sb.append("\"Klasse\": \"").append(row[0]).append("\",");
-            sb.append("\"Name\": \"").append(row[1]).append("\",");
-            sb.append("\"Vorname\": \"").append(row[2]).append("\",");
+            sb.append("\"Klasse\": \"").append(row[0] == null ? "" : row[0]).append("\",");
+            sb.append("\"Name\": \"").append(row[1] == null ? "" : row[1]).append("\",");
+            sb.append("\"Vorname\": \"").append(row[2] == null ? "" : row[2]).append("\",");
             for (int i = 3; i < row.length; i++) {
-                sb.append("\"Wahl").append(i - 2).append("\": \"").append(row[i]).append("\",");
+                sb.append("\"Wahl").append(i - 2).append("\": \"").append(row[i] == null ? "" : row[i]).append("\",");
             }
             // Entferne das letzte Komma
             sb.deleteCharAt(sb.length() - 1);
