@@ -24,15 +24,16 @@ public class ExcelReader {
      *
      * @param args Die Befehlszeilenargumente (nicht verwendet).
      */
-    /**
-    public static void main(String[] args) {
-        List<List<String>> excelData = readExcel("C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx");
-        // Excel
-        for (List<String> row : excelData) {
-            System.out.println(row);
-        }
-    }
-     */
+
+/**
+     public static void main(String[] args) {
+     List<List<String>> excelData = readExcel("C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx");
+     // Excel
+     for (List<String> row : excelData) {
+     System.out.println(row);
+     }
+     }
+*/
 
     /**
      * Diese Methode liest eine Excel-Datei ein und gibt deren Inhalt als Liste von Zeilen zurück.
@@ -45,7 +46,12 @@ public class ExcelReader {
         try (FileInputStream fis = new FileInputStream(filename);
              Workbook workbook = new XSSFWorkbook(fis)) { // Hier kann auch HSSFWorkbook für .xls-Dateien verwendet werden
             Sheet sheet = workbook.getSheetAt(0);
-            for (Row row : sheet) {
+            Iterator<Row> rowIterator = sheet.iterator();
+            if (rowIterator.hasNext()) { // Überprüfe, ob mindestens eine Zeile vorhanden ist
+                rowIterator.next(); // Springe zur nächsten Zeile (überspringe die erste Zeile)
+            }
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
                 List<String> rowData = new ArrayList<>();
                 while (cellIterator.hasNext()) {
