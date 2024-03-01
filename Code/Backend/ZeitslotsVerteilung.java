@@ -81,5 +81,9 @@ public class ZeitslotsVerteilung {
         // Übergabe Schülerliste und Zeitslotliste und verteilung der Schüler auf die Slots
         ZeitslotsVerteilung zeitslotsVerteilung = new ZeitslotsVerteilung(beispielSchuelerListe, beispielZeitslotsListe);
         zeitslotsVerteilung.verteileSchuelerAufSlots();
-    }
-}
+
+
+ 
+            }
+          }
+            

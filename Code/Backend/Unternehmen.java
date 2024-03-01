@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Unternehmen {
 
-    private List<String> unternehmensliste;
+    //private List<String> unternehmensliste;
 
     private String firmenNr;
     private String firmenName;

@@ -1,4 +1,3 @@
-/*
 package org.example;
 
 import org.apache.poi.ss.usermodel.*;
@@ -10,34 +9,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-*/
-/**
+ /**
  * Klasse zum Erstellen einer Excel-Datei für die Raum- und Zeitplanung.
  *
  * @author NickDuecker
- *//*
+ */
 
 public class PrintRaumUndZeitPlanung {
-    */
-/**
-    public static void main(String[] args) {
-        // Beispielarrayliste erstellen (Nur als Platzhalter)
-        List<List<String>> dataList = new ArrayList<>();
-        dataList.add(Arrays.asList("1", "Zentis", "209", "", "", "", ""));
-        dataList.add(Arrays.asList("2", "Babor Kosmetik", "109", "109", "109", "", ""));
-        dataList.add(Arrays.asList("3", "RWTH Aachen", "", "", "108", "108", "108"));
-
-        createExcel(dataList);
-    }
-     *//*
-
-
-    */
-/**
+     /**
      * Methode zum Erstellen einer Excel-Datei aus einer List von Daten.
      *
      * @param dataList Die Liste der Daten, die in die Excel-Datei geschrieben werden sollen.
-     *//*
+     */
 
     public static void createExcel(List<List<String>> dataList) {
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -76,4 +59,4 @@ public class PrintRaumUndZeitPlanung {
             System.err.println("Fehler beim Erstellen der Excel-Datei: " + e.getMessage());
         }
     }
-}*/
+}

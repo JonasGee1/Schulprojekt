@@ -115,6 +115,8 @@ class SchuelerWahlSumme {
 
         return schuelerList;
     }
+
+    
 }
 
 
