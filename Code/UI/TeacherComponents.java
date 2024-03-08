@@ -16,7 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Vector;
 
 public class TeacherComponents {
     private ArrayList<String> companies;
@@ -28,7 +28,6 @@ public class TeacherComponents {
     private JButton saveButton;
     private JButton addStudentsButton;
     private JButton removeStudentsButton;
-    private JButton printListButton;
     private String selectedFilePath;
 
     public TeacherComponents(ArrayList<String> companies, Window window, ArrayList<Object[]> data, String selectedFilePath) {
@@ -41,7 +40,6 @@ public class TeacherComponents {
         if (this.data.isEmpty()) {
             this.saveButton.setEnabled(false);
             this.addStudentsButton.setEnabled(false);
-            this.printListButton.setEnabled(false);
         }
         if(this.data.size() == 1){
             this.removeStudentsButton.setEnabled(false);
@@ -76,14 +74,10 @@ public class TeacherComponents {
 
         this.studentsTable.getTableHeader().setReorderingAllowed(false);
 
-        this.tableModel.addTableModelListener(e -> {
-            this.onTableDataChanged(e);
-        });
+        this.tableModel.addTableModelListener(e -> this.onTableDataChanged(e));
 
         if (!this.data.isEmpty()) {
             this.studentsTable.setRowSelectionInterval(this.data.size() - 1, this.data.size() - 1);
-        } else {
-
         }
     }
 
@@ -91,6 +85,26 @@ public class TeacherComponents {
         int row = e.getFirstRow();
         int column = e.getColumn();
         if (row >= 0 && column >= 0) {
+            if(column >= 3){
+
+                for(int i = 0; i < this.data.get(row).length; i++){
+
+                    if(this.data.get(row)[i] != null && this.data.get(row)[i].equals(this.tableModel.getValueAt(row, column))){
+                        Vector tableDataVector = tableModel.getDataVector();
+                        Vector<String> v;
+                        for (Object o : tableDataVector) {
+                            if (o != null) {
+                                v = (Vector) tableDataVector.get(row);
+                                v.set(i, null);
+                                data.get(row)[i] = v;
+                                this.studentsTable.revalidate();
+                                this.studentsTable.repaint();
+                            }
+                        }
+                    }
+                }
+            }
+
             Object newValue = this.tableModel.getValueAt(row, column);
             if (row < data.size()) { // Update existing data if it exists
                 data.get(row)[column] = newValue;
@@ -112,19 +126,19 @@ public class TeacherComponents {
 
     private void onSaveButtonClick() throws IOException {
         if (this.isListComplete()) {
-            this.saveJsonToFile();
+            this.saveToExcel();
         } else {
             int value = JOptionPane.showInternalConfirmDialog(null, "Liste ist nicht Vollständig. \nTrotzdem speichern?", "Warnung", JOptionPane.YES_NO_OPTION);
             if (value == JOptionPane.YES_OPTION) {
-                this.saveJsonToFile();
+                this.saveToExcel();
             }
         }
     }
 
     private boolean isListComplete() {
         for (Object[] dataRow : this.data) {
-            for (int i = 0; i < dataRow.length; i++) {
-                if (dataRow[i] == null || dataRow[i].toString().trim().isEmpty() || dataRow[i].toString().trim() == "") {
+            for (Object o : dataRow) {
+                if (o == null || o.toString().trim().isEmpty() || o.toString().trim().equals("")) {
                     return false;
                 }
             }
@@ -185,13 +199,11 @@ public class TeacherComponents {
 
         this.addStudentsButton.setEnabled(true);
         this.removeStudentsButton.setEnabled(false);
-        this.printListButton.setEnabled(true);
     }
 
     private void onLoadListButtonClick() throws IOException {
-        this.loadTextFromFile();
+        this.loadExcel();
     }
-
 
     private JPanel getButtonsPanel() {
         JPanel buttonsPanel = new JPanel(new GridLayout(6, 1, 5, 10));
@@ -202,33 +214,27 @@ public class TeacherComponents {
         this.removeStudentsButton = createButton("Schüler entfernen", e -> onRemoveStudentsButtonClick());
         buttonsPanel.add(this.removeStudentsButton);
 
-        buttonsPanel.add(createButton("Neue Liste", e -> onCreateNewListButtonClick()));
-        this.saveButton = createButton("Speichern", e -> {
+        JButton newListButton = createButton("Neue Liste", e -> onCreateNewListButtonClick());
+
+        this.saveButton = createButton("Exportieren", e -> {
             try {
                 onSaveButtonClick();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-        buttonsPanel.add(this.saveButton);
-        buttonsPanel.add(createButton("Liste Laden", e -> {
+
+        JButton importButton =createButton("Importieren", e -> {
             try {
                 this.onLoadListButtonClick();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }));
-
-        this.printListButton = createButton("Zu Excel", e -> {
-            try {
-                this.saveJsonToExcel();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
-
         });
-        buttonsPanel.add(this.printListButton);
+
+        buttonsPanel.add(importButton);
+        buttonsPanel.add(this.saveButton);
+        buttonsPanel.add(newListButton);
 
         buttonsPanel.add(createButton("Zurück", e -> onBackButtonClick()));
 
@@ -236,7 +242,7 @@ public class TeacherComponents {
     }
 
 
-    public void saveJsonToExcel() throws IOException {
+    public void saveToExcel() throws IOException {
         // Erstellen eines neuen Excel-Arbeitsbuches
         Workbook workbook = new XSSFWorkbook();
 
@@ -354,10 +360,9 @@ public class TeacherComponents {
     }
 
 
-    public void loadTextFromFile() throws IOException {
+    public void loadExcel() throws IOException {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("JSON-Dateien", "json"));
-
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel-Dateien", "xlsx"));
 
         int result = fileChooser.showOpenDialog(null);
 
@@ -366,60 +371,40 @@ public class TeacherComponents {
 
             File file = fileChooser.getSelectedFile();
 
-            FileReader reader = new FileReader(file);
-            BufferedReader br = new BufferedReader(reader);
-            String jsonText = "";
-            String line;
-            while ((line = br.readLine()) != null) {
-                jsonText += line + "\n";
-            }
-            br.close();
+            FileInputStream inputStream = new FileInputStream(file);
+            Workbook workbook = new XSSFWorkbook(inputStream);
 
-            jsonText = jsonText.trim();
+            Sheet sheet = workbook.getSheetAt(0); // assuming data is in the first sheet
 
-            if (!jsonText.startsWith("[") || !jsonText.endsWith("]")) {
-                throw new IllegalArgumentException("Ungültiges JSON-Format: Array erwartet");
-            }
+            this.data.clear(); // Clear existing data
 
-            // Entferne die Array-Klammern
-            jsonText = jsonText.substring(1, jsonText.length() - 1);
-
-            // Teile den String in einzelne Objekte auf
-            String[] objects = jsonText.split("},");
-
-            // Initialisiere das Ergebnis-Array
-            Object[][] newData = new Object[objects.length][];
-
-            for (int i = 0; i < objects.length; i++) {
-                // Entferne führende und trailing Leerzeichen vom Objekt
-                objects[i] = objects[i].trim();
-
-                // Entferne die Objekt-Klammern
-                objects[i] = objects[i].substring(1, objects[i].length() - 1);
-
-                // Teile das Objekt in Schlüssel-Wert-Paare auf
-                String[] keyValues = objects[i].split(",");
-
-                // Initialisiere das Objekt-Array für diesen Datensatz
-                newData[i] = new Object[keyValues.length];
-
-                for (int j = 0; j < keyValues.length; j++) {
-                    // Teile Schlüssel und Wert auf
-                    String[] keyValue = keyValues[j].trim().split(":");
-
-                    // Extrahiere Schlüssel und Wert
-                    String key = keyValue[0].trim().replace("\"", "");
-                    String value = keyValue[1].trim().replace("\"", "");
-
-                    // Speichere Schlüssel-Wert-Paar im Ergebnis-Array
-                    newData[i][j] = value;
+            // Start reading from the second row (index 1) to skip the header row
+            for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+                Row currentRow = sheet.getRow(rowIndex);
+                if (currentRow != null) {
+                    Object[] rowData = new Object[currentRow.getLastCellNum()];
+                    for (int i = 0; i < currentRow.getLastCellNum(); i++) {
+                        Cell cell = currentRow.getCell(i);
+                        if (cell != null) {
+                            switch (cell.getCellType()) {
+                                case STRING -> rowData[i] = cell.getStringCellValue();
+                                case NUMERIC -> rowData[i] = cell.getNumericCellValue();
+                                case BOOLEAN -> rowData[i] = cell.getBooleanCellValue();
+                                default -> rowData[i] = null;
+                            }
+                        } else {
+                            rowData[i] = null;
+                        }
+                    }
+                    this.data.add(rowData);
                 }
             }
-            this.data = new ArrayList<>();
-            for (Object[] row : newData) {
-                data.add(Arrays.copyOf(row, row.length));
-            }
-            tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
+
+            workbook.close();
+            inputStream.close();
+
+            // Update table model with new data
+            this.tableModel.setDataVector(data.toArray(new Object[0][]), getColumNames());
             addComboBoxesToTable(this.studentsTable, 3, 8);
             this.studentsTable.revalidate();
             this.studentsTable.repaint();
@@ -429,10 +414,10 @@ public class TeacherComponents {
             this.addStudentsButton.setEnabled(true);
             this.removeStudentsButton.setEnabled(true);
 
-
-            JOptionPane.showConfirmDialog(null, "List geladen!", "Liste geladen", JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showConfirmDialog(null, "Liste geladen!", "Liste geladen", JOptionPane.DEFAULT_OPTION);
         }
     }
+
 
     private String[] getColumNames() {
         int columnCount = tableModel.getColumnCount();
