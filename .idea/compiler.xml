@@ -9,5 +9,8 @@
         <module name="Projekt" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ExelReader" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
