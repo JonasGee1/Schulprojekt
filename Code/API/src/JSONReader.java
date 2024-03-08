@@ -21,7 +21,6 @@ public class JSONReader {
                         // Füge den Wert zur Liste hinzu (ohne Anführungszeichen)
                         dataList.add(pairParts[1].trim().replaceAll("\"", ""));
                     } else {
-                        System.err.println("Ungültiges Key-Value-Paar: " + pair);
                     }
                 }
             }
