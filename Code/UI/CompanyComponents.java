@@ -1,6 +1,5 @@
 package Code.UI;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -66,7 +65,7 @@ public class CompanyComponents {
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 
         //Hinzufügen Button
-        JButton addButton = new JButton("Betrieb anlegen");
+        JButton addButton = new JButton("Betrieb hinzufügen");
         addButton.addActionListener(e -> {
             String companyName = JOptionPane.showInputDialog(window, "Geben Sie den Namen des Unternehmens ein:");
             if (companyName != null && !companyName.isEmpty()) {
@@ -78,7 +77,7 @@ public class CompanyComponents {
         });
 
         //Entfernen Button
-        JButton deleteButton = new JButton("Betrieb löschen");
+        JButton deleteButton = new JButton("Betrieb entfernen");
         deleteButton.addActionListener(e -> {
             int selectedRow = companyTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -92,7 +91,7 @@ public class CompanyComponents {
         });
 //TODO: Richtige Zeitslots einfügen, select and deselct all button
         // Button zum Angeben der Zeit
-        JButton timeButton = new JButton("Zeit angeben");
+        JButton timeButton = new JButton("Zeiten anpassen");
         timeButton.addActionListener(e -> {
             int selectedRow = companyTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -140,7 +139,7 @@ public class CompanyComponents {
                 buttonPanelForTimeSelection.add(deselectAllButton);
                 timePanel.add(buttonPanelForTimeSelection, BorderLayout.SOUTH);
 
-                int result = JOptionPane.showConfirmDialog(window, timePanel, "Zeitintervall für " + companies.get(selectedRow), JOptionPane.OK_CANCEL_OPTION);
+                int result = JOptionPane.showConfirmDialog(window, timePanel, "Zeiten für " + companies.get(selectedRow), JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     ArrayList<String> selectedTimeSlots = new ArrayList<>();
                     for (JCheckBox checkBox : timeSlotsCheckBoxes) {
@@ -188,7 +187,6 @@ public class CompanyComponents {
 
         // Hinzufügen des Import-Buttons zum Button-Panel
         buttonPanel.add(importButton);
-
 
         // Hinzufügen des Export-Buttons zum Button-Panel
         buttonPanel.add(exportButton);
