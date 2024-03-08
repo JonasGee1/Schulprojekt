@@ -276,15 +276,13 @@ public class CompanyComponents {
                     timeIntervals.add(intervals);
                     tableModel.addRow(new Object[]{companyName, String.join(", ", intervals)});
                 }
-                //TODO:Fehler richtig implementieren
                 JOptionPane.showMessageDialog(null, "Daten erfolgreich importiert!", "Importieren", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException | InvalidFormatException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Fehler beim Importieren der Daten", "Fehler", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Ein unerwarteter Fehler ist aufgetreten.", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
 
     private void removeAllComponents() {
         window.remove(this.mainPanel);
