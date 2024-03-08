@@ -1,4 +1,5 @@
 package Code.Backend;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,7 +23,6 @@ public class JSONReader {
                         // Füge den Wert zur Liste hinzu (ohne Anführungszeichen)
                         dataList.add(pairParts[1].trim().replaceAll("\"", ""));
                     } else {
-                        System.err.println("Ungültiges Key-Value-Paar: " + pair);
                     }
                 }
             }

@@ -12,7 +12,7 @@ public class Main {
         List<Schueler> schueler;
         List<FeldNummerUndSchueler> maxList;
         // Eingabe des Pfades
-        String filePath = "T:\\Gruppe2\\StanTest.json";
+        String filePath = "T:\\Gruppe2\\StanTest.json"; //Dateipfad und Klasse Backend\JsonReader angepasst - Muelfarth
         // Hier liest der JSONReader aus dem Pfad
         ArrayList<String> data = JSONReader.readJSONFile(filePath);
 
