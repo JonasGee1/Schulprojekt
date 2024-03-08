@@ -15,7 +15,7 @@ public class InfoMaxSchuelerList {
         this.schuelerListe = schuelerListe;
     }
 
-    public void erstelleNeueListe() {
+    public List<FeldNummerUndSchueler> erstelleNeueListe() {
         // Liste nach Wahl1 sortieren
         schuelerListe.sort(Comparator.comparing(Schueler::getWahl1));
 
@@ -52,6 +52,7 @@ public class InfoMaxSchuelerList {
         for (FeldNummerUndSchueler eintrag : neueListe) {
             System.out.println(eintrag);
         }
+        return neueListe;
     }
 
     // Summation der Anzahl

@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Code.Backend.InfoMaxSchuelerList.FeldNummerUndSchueler;
+
 public class Main {
     
     public static void main(String[] args) {
         // Schülerliste mit den Wahlen
         List<Schueler> schueler;
-
+        List<FeldNummerUndSchueler> maxList;
         // Eingabe des Pfades
         String filePath = "test";
         // Hier liest der JSONReader aus dem Pfad
@@ -21,7 +23,8 @@ public class Main {
 
         schueler = SchuelerWahlSumme.erstelleSchuelerList(data);
         InfoMaxSchuelerList liste = new InfoMaxSchuelerList(schueler);
-        liste.erstelleNeueListe();
+        maxList =  liste.erstelleNeueListe();
+        
         //System.out.println(liste.toString());
 
 
