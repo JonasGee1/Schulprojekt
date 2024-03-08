@@ -10,7 +10,7 @@ public class JSONReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                line = line.trim().replaceAll("[\\[\\]][{}]", "");
+                line = line.trim().replaceAll("[\\[\\]{}]", "");
                 line = line.replaceAll(",", ",\n");
                 String[] keyValuePairs = line.split(",");
                 for (String pair : keyValuePairs) {

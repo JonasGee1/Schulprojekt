@@ -6,9 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ExelReader" />
         <module name="Projekt" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ExelReader" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
