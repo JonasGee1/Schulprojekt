@@ -1,18 +1,26 @@
 package Code.Backend;
-import API.*;
+
+import java.util.ArrayList;
+
 public class Main {
-
-    public void init(){
-        //JSONReader reader = new JSONReader();
-
-    }
-
-
+    
     public static void main(String[] args) {
+        Schueler schueler;
+
+
+        String filePath = "test";
+        ArrayList<String> data = JSONReader.readJSONFile(filePath);
+        // Ausgabe der Daten
+        for (String value : data) {
+            value.split(",");
+            System.out.println(value);
+        }
+
         
-        
+
 
 
     }
+
 }
 */
