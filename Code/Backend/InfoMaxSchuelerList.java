@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class InfoMaxSchuelerList {
 
     private List<Schueler> schuelerListe;
@@ -18,11 +17,10 @@ public class InfoMaxSchuelerList {
 
     public void erstelleNeueListe() {
         // Liste nach Wahl1 sortieren
-        schuelerListe.sort(Comparator.comparingInt(Schueler::getWahl1));
-        
+        schuelerListe.sort(Comparator.comparing(Schueler::getWahl1));
 
         // Map für die Häufigkeit der Zahlen in Wahl1 bis Wahl6 erstellen
-        Map<Integer, Integer> wahlHaeufigkeitMap = new HashMap<>();
+        Map<Object, Integer> wahlHaeufigkeitMap = new HashMap<>();
         for (Schueler schueler : schuelerListe) {
             erhoeheHaeufigkeit(wahlHaeufigkeitMap, schueler.getWahl1());
             erhoeheHaeufigkeit(wahlHaeufigkeitMap, schueler.getWahl2());
@@ -34,19 +32,19 @@ public class InfoMaxSchuelerList {
 
         // Neue Liste erstellen
         List<FeldNummerUndSchueler> neueListe = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : wahlHaeufigkeitMap.entrySet()) {
-            int feldNummer = entry.getKey();
+        for (Map.Entry<Object, Integer> entry : wahlHaeufigkeitMap.entrySet()) {
+            Object key = entry.getKey();
             int anzahl = entry.getValue();
 
             // Schüler, die diese Nummer als Wahl1 haben
             List<Schueler> schuelerMitNummer = new ArrayList<>();
             for (Schueler schueler : schuelerListe) {
-                if (schueler.getWahl1() == feldNummer) {
+                if (key.equals(schueler.getWahl1())) {
                     schuelerMitNummer.add(schueler);
                 }
             }
 
-            neueListe.add(new FeldNummerUndSchueler(feldNummer, anzahl, schuelerMitNummer));
+            neueListe.add(new FeldNummerUndSchueler( key, anzahl, schuelerMitNummer));
         }
 
         // Ausgabe der neuen Liste
@@ -55,57 +53,59 @@ public class InfoMaxSchuelerList {
             System.out.println(eintrag);
         }
     }
+
     // Summation der Anzahl
-    private static void erhoeheHaeufigkeit(Map<Integer, Integer> map, int zahl) {
-        map.merge(zahl, 1, Integer::sum);
-        
+    private static void erhoeheHaeufigkeit(Map<Object, Integer> wahlHaeufigkeitMap, Object key) {
+        wahlHaeufigkeitMap.merge(key, 1, Integer::sum);
     }
 
-    public List<Schueler> getSchueler(){
+    public List<Schueler> getSchueler() {
         return this.schuelerListe;
-    } 
+    }
 
- 
     public static void main(String[] args) {
         // Beispiel-Daten aus der SchuelerVerarbeitung Klasse
         List<Schueler> beispielListe = new ArrayList<Schueler>();
-        beispielListe.add(new Schueler("ITF213", "Kopacz","Stan", "1", "2", "3", "4", "5", "6"));
-        beispielListe.add(new Schueler("ITF213", "Duecker","Nick" ,"5", "2", "3", "4", "1", "6"));
-        beispielListe.add(new Schueler("ITF213", "Hardel","Marvin" ,"5", "2", "3", "4", "1", "6"));
+        beispielListe
+                .add(new Schueler("ITF213", "Kopacz", "Stan", "Polizei", "Barbor", "Inda", "Zuerich", "Kevler", "Smk"));
+        beispielListe.add(
+                new Schueler("ITF213", "Duecker", "Nick", "Polizei", "Barbor", "Kevler", "Inda", "Zuerich", "Smk"));
+        beispielListe.add(
+                new Schueler("ITF213", "Hardel", "Marvin", "Barbor", "Polizei", "Kevler", "Zuerich", "Smk", "Inda"));
         InfoMaxSchuelerList liste = new InfoMaxSchuelerList(beispielListe);
         liste.erstelleNeueListe();
-        
-}
 
-class FeldNummerUndSchueler {
-    private int feldNummer;
-    private int anzahl;
-    private List<Schueler> schuelerListe;
-
-    public FeldNummerUndSchueler(int feldNummer, int anzahl, List<Schueler> schuelerListe) {
-        this.feldNummer = feldNummer;
-        this.anzahl = anzahl;
-        this.schuelerListe = schuelerListe;
     }
 
-    @Override
-    public String toString() {
-        return "Feldnummer: " + feldNummer + ", Anzahl: " + anzahl + ", Schüler: " + Arrays.toString(showSchuelerListe(schuelerListe));
-    }
+    class FeldNummerUndSchueler {
+        private Object feldNummer;
+        private int anzahl;
+        private List<Schueler> schuelerListe;
 
-
-    public String[] showSchuelerListe(List<Schueler> schueler){
-        schueler.sort(Comparator.comparingInt(Schueler::getWahl2).thenComparingInt(Schueler::getWahl1).reversed());
-        String[] name = new String[schueler.size()];
-        int i = 0;
-        for(Schueler s : schueler){
-        
-           name[i] = s.getnachName();
-           i++;
+        public FeldNummerUndSchueler(Object key, int anzahl, List<Schueler> schuelerListe) {
+            this.feldNummer =  key;
+            this.anzahl = anzahl;
+            this.schuelerListe = schuelerListe;
         }
-        return name;
 
+        @Override
+        public String toString() {
+            return "Feldnummer: " + feldNummer + ", Anzahl: " + anzahl + ", Schüler: "
+                    + Arrays.toString(showSchuelerListe(schuelerListe));
+        }
+
+        public String[] showSchuelerListe(List<Schueler> schueler) {
+            schueler.sort(Comparator.comparing(Schueler::getWahl2).thenComparing(Schueler::getWahl1).reversed());
+            String[] name = new String[schueler.size()];
+            int i = 0;
+            for (Schueler s : schueler) {
+
+                name[i] = s.getnachName();
+                i++;
+            }
+            return name;
+
+        }
+        // Neuer Test
     }
-    // Neuer Test
-}
 }

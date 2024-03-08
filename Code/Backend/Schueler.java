@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 //Erstellung der Schülerklasse und der Summation der Wahlen
 
@@ -13,24 +14,24 @@ public class Schueler {
     private String nachName;
     private String vorName;
     private String klasse;
-    private int wahl1;
-    private int wahl2;
-    private int wahl3;
-    private int wahl4;
-    private int wahl5;
-    private int wahl6;
+    private String wahl1;
+    private String wahl2;
+    private String wahl3;
+    private String wahl4;
+    private String wahl5;
+    private String wahl6;
 
     public Schueler( String klasse, String nachName, String vorName, String wahl1, String wahl2, String wahl3, String wahl4, String wahl5, String wahl6) {
         
         this.klasse = klasse;
         this.nachName = nachName;
         this.vorName = vorName;
-        this.wahl1 = Integer.parseInt(wahl1);
-        this.wahl2 = Integer.parseInt(wahl2);
-        this.wahl3 = Integer.parseInt(wahl3);
-        this.wahl4 = Integer.parseInt(wahl4);
-        this.wahl5 = Integer.parseInt(wahl5);
-        this.wahl6 = Integer.parseInt(wahl6);
+        this.wahl1 =wahl1;
+        this.wahl2 =wahl2;
+        this.wahl3 =wahl3;
+        this.wahl4 =wahl4;
+        this.wahl5 =wahl5;
+        this.wahl6 =wahl6;
     }
 
     public String getnachName() {
@@ -44,27 +45,27 @@ public class Schueler {
         return klasse;
     }
 
-    public int getWahl1() {
+    public String getWahl1() {
         return wahl1;
     }
 
-    public int getWahl2() {
+    public String getWahl2() {
         return wahl2;
     }
 
-    public int getWahl3() {
+    public String getWahl3() {
         return wahl3;
     }
 
-    public int getWahl4() {
+    public String getWahl4() {
         return wahl4;
     }
 
-    public int getWahl5() {
+    public String getWahl5() {
         return wahl5;
     }
 
-    public int getWahl6() {
+    public String getWahl6() {
         return wahl6;
     }
 
@@ -96,9 +97,20 @@ class SchuelerWahlSumme {
     }
     public static List<Schueler> erstelleSchuelerList(ArrayList<String> stringListe) {
         List<Schueler> schuelerList = new ArrayList<>();
-
+        String[] daten = new String[9];
+        int i = 0;
         for (String eintrag : stringListe) {
-            String[] daten = eintrag.split(",");
+
+            String[] temp = eintrag.split(",");
+            daten[i] = temp[0];
+            i++;
+            
+            /* for(int i = 0; i < 9; i++){
+                String str[] = eintrag.split(",");
+                System.out.println(str);
+                daten[i] = str[0];
+            } */
+        if(i == 9){
             Schueler schueler = new Schueler(
                     daten[0], // Klasse
                     daten[1], // Nachname
@@ -111,8 +123,10 @@ class SchuelerWahlSumme {
                     daten[8]  // wahl6
             );
             schuelerList.add(schueler);
-        }
+            i = 0;
+                }
 
+        }
         return schuelerList;
     }
 
