@@ -79,7 +79,7 @@ public class Window extends JFrame {
     }
 
     private JButton createCloseButton() {
-        JButton closeButton = new JButton("Schließen");
+        JButton closeButton = new JButton("Beenden");
         closeButton.addActionListener(e -> closeWindow());
         return closeButton;
     }

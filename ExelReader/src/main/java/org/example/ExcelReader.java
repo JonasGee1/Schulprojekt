@@ -1,4 +1,4 @@
-package org.example;
+package ExelReader.src.main.java.org.example;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,20 +11,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- * Diese Klasse liest Daten aus einer Excel-Datei ein und speichert sie in einem Array.
+ /**
+ * Diese Klasse liest Daten aus einer Excel-Datei ein und speichert sie in einer Liste.
  * Es verwendet die Apache POI-Bibliothek, um mit Excel-Dateien zu arbeiten.
  *
  * @author NickDuecker
  */
 
 public class ExcelReader {
-
-    /**
-     * Die Hauptmethode des Programms, die die Excel-Daten einliest und ausgibt.
-     *
-     * @param args Die Befehlszeilenargumente (nicht verwendet).
-     */
 
     /**
      * Diese Methode liest eine Excel-Datei ein und gibt deren Inhalt als Array von String-Arrays zurück.
@@ -71,3 +65,4 @@ public class ExcelReader {
         return excelData;
     }
 }
+
