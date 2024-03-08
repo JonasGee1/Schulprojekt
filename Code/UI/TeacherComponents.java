@@ -119,8 +119,6 @@ public class TeacherComponents {
                 this.saveJsonToFile();
             }
         }
-
-
     }
 
     private boolean isListComplete() {
