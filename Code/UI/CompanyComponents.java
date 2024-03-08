@@ -1,8 +1,19 @@
 package Code.UI;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CompanyComponents {
@@ -11,6 +22,8 @@ public class CompanyComponents {
     private ArrayList<ArrayList<String>> timeIntervals = new ArrayList<>();
     private Window window;
     private JPanel mainPanel;
+
+    private DefaultTableModel tableModel;
 
     public CompanyComponents(Window window) {
 
@@ -28,6 +41,7 @@ public class CompanyComponents {
     private void createCompanyComponents() {
         JPanel companyPanel = new JPanel(new BorderLayout());
 
+
         //Erstellen der Tabelle für Betriebe
         String[] columnNames = {"Unternehmen", "Zeit"};
         Object[][] data = new Object[companies.size()][2];
@@ -36,7 +50,7 @@ public class CompanyComponents {
             String timeIntervalsAsString = String.join(", ", timeIntervals.get(i));
             data[i][1] = timeIntervalsAsString;
         }
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
+        this.tableModel = new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -104,6 +118,28 @@ public class CompanyComponents {
 
                 timePanel.add(checkboxesPanel, BorderLayout.CENTER);
 
+                // Button zum Anwählen aller Zeiten
+                JButton selectAllButton = new JButton("Alle auswählen");
+                selectAllButton.addActionListener(ev -> {
+                    for (JCheckBox checkBox : timeSlotsCheckBoxes) {
+                        checkBox.setSelected(true);
+                    }
+                });
+
+                // Button zum Abwählen aller Zeiten
+                JButton deselectAllButton = new JButton("Alle abwählen");
+                deselectAllButton.addActionListener(ev -> {
+                    for (JCheckBox checkBox : timeSlotsCheckBoxes) {
+                        checkBox.setSelected(false);
+                    }
+                });
+
+                // Hinzufügen der Buttons zum Zeitauswahl-Panel
+                JPanel buttonPanelForTimeSelection = new JPanel(new FlowLayout());
+                buttonPanelForTimeSelection.add(selectAllButton);
+                buttonPanelForTimeSelection.add(deselectAllButton);
+                timePanel.add(buttonPanelForTimeSelection, BorderLayout.SOUTH);
+
                 int result = JOptionPane.showConfirmDialog(window, timePanel, "Zeitintervall für " + companies.get(selectedRow), JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     ArrayList<String> selectedTimeSlots = new ArrayList<>();
@@ -136,12 +172,119 @@ public class CompanyComponents {
         // Buttons-Panel zum Company-Panel hinzufügen
         companyPanel.add(buttonPanel, BorderLayout.EAST);
 
+        JButton exportButton = new JButton("Exportieren");
+        exportButton.addActionListener(e -> {
+            try {
+                saveJsonToExcel(); // Aufruf der Methode zum Exportieren der Daten in eine Excel-Datei
+            } catch (IOException ex) {
+                ex.printStackTrace(); // Fehlerbehandlung für den Fall, dass das Exportieren fehlschlägt
+            }
+        });
+
+        JButton importButton = new JButton("Importieren");
+        importButton.addActionListener(e -> {
+            importFromExcel(); // Aufruf der Importmethode
+        });
+
+        // Hinzufügen des Import-Buttons zum Button-Panel
+        buttonPanel.add(importButton);
+
+
+        // Hinzufügen des Export-Buttons zum Button-Panel
+        buttonPanel.add(exportButton);
+
         // Company-Panel zum Hauptfenster hinzufügen
         this.mainPanel = new JPanel(new BorderLayout());
         this.mainPanel.add(companyPanel, BorderLayout.CENTER);
         window.add(this.mainPanel, BorderLayout.CENTER);
         window.revalidate();
     }
+
+    public void saveJsonToExcel() throws IOException {
+        // Erstellen eines neuen Excel-Arbeitsbuches
+        Workbook workbook = new XSSFWorkbook();
+
+        // Erstellen eines Arbeitsblatts im Arbeitsbuch
+        Sheet sheet = workbook.createSheet("Unternehmen");
+
+        // Erstellen einer Zeile für die Spaltenüberschriften
+        Row headerRow = sheet.createRow(0);
+
+        // Hinzufügen der Spaltenüberschriften
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(tableModel.getColumnName(i));
+        }
+
+        // Hinzufügen der Datenzeilen
+        for (int rowIndex = 0; rowIndex < tableModel.getRowCount(); rowIndex++) {
+            Row row = sheet.createRow(rowIndex + 1);
+            for (int colIndex = 0; colIndex < tableModel.getColumnCount(); colIndex++) {
+                Cell cell = row.createCell(colIndex);
+                Object value = tableModel.getValueAt(rowIndex, colIndex);
+                if (value != null) {
+                    cell.setCellValue(value.toString());
+                }
+            }
+        }
+
+        // Speichern des Arbeitsbuches in einer Datei
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel-Dateien", "xlsx"));
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            String filePath = file.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+            }
+            JOptionPane.showConfirmDialog(null, "Erfolgreich gespeichert!", "Gespeichert", JOptionPane.DEFAULT_OPTION);
+        }
+
+        // Schließen des Arbeitsbuches
+        workbook.close();
+    }
+
+    public void importFromExcel() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel-Dateien", "xlsx"));
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try (Workbook workbook = new XSSFWorkbook(file)) {
+                Sheet sheet = workbook.getSheetAt(0); // Annahme: Daten sind im ersten Blatt
+
+                // Löschen der vorhandenen Daten
+                companies.clear();
+                timeIntervals.clear();
+                tableModel.setRowCount(0);
+
+                // Lesen der Datenzeilen
+                for (Row row : sheet) {
+                    String companyName = row.getCell(0).getStringCellValue();
+                    ArrayList<String> intervals = new ArrayList<>();
+                    for (int i = 1; i < row.getLastCellNum(); i++) {
+                        Cell cell = row.getCell(i);
+                        if (cell != null) {
+                            intervals.add(cell.getStringCellValue());
+                        }
+                    }
+                    companies.add(companyName);
+                    timeIntervals.add(intervals);
+                    tableModel.addRow(new Object[]{companyName, String.join(", ", intervals)});
+                }
+                //TODO:Fehler richtig implementieren
+                JOptionPane.showMessageDialog(null, "Daten erfolgreich importiert!", "Importieren", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException | InvalidFormatException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Fehler beim Importieren der Daten", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
     private void removeAllComponents() {
         window.remove(this.mainPanel);
