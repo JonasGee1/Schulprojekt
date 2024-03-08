@@ -64,7 +64,7 @@ public class InfoMaxSchuelerList {
     }
 
     public static void main(String[] args) {
-        // Beispiel-Daten aus der SchuelerVerarbeitung Klasse
+        /* // Beispiel-Daten aus der SchuelerVerarbeitung Klasse
         List<Schueler> beispielListe = new ArrayList<Schueler>();
         beispielListe
                 .add(new Schueler("ITF213", "Kopacz", "Stan", "Polizei", "Barbor", "Inda", "Zuerich", "Kevler", "Smk"));
@@ -73,7 +73,7 @@ public class InfoMaxSchuelerList {
         beispielListe.add(
                 new Schueler("ITF213", "Hardel", "Marvin", "Barbor", "Polizei", "Kevler", "Zuerich", "Smk", "Inda"));
         InfoMaxSchuelerList liste = new InfoMaxSchuelerList(beispielListe);
-        liste.erstelleNeueListe();
+        liste.erstelleNeueListe(); */
 
     }
 

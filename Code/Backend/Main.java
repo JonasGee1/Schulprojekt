@@ -14,11 +14,17 @@ public class Main {
         String filePath = "test";
         // Hier liest der JSONReader aus dem Pfad
         ArrayList<String> data = JSONReader.readJSONFile(filePath);
+
         // Erstellen der maximalen Schüleranzahlliste
+
+        // Erstellen der Maximalen Schüleranzahlliste
+
         schueler = SchuelerWahlSumme.erstelleSchuelerList(data);
         InfoMaxSchuelerList liste = new InfoMaxSchuelerList(schueler);
         liste.erstelleNeueListe();
         //System.out.println(liste.toString());
+
+
 
         List<Zeitslots> beispielZeitslotsListe = new ArrayList<>();
         beispielZeitslotsListe.add(new Zeitslots("Polizei", "", "", "", "", ""));
@@ -28,6 +34,14 @@ public class Main {
         
         ZeitslotsVerteilung zeitslotsVerteilung = new ZeitslotsVerteilung(schueler, beispielZeitslotsListe);
         zeitslotsVerteilung.verteileSchuelerAufSlots();
+        
+        
+        
+        
+        
+
+
+        
         
 
 
