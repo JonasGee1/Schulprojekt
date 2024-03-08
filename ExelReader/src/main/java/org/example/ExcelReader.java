@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,11 +11,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
  /**
  * Diese Klasse liest Daten aus einer Excel-Datei ein und speichert sie in einer Liste.
  * Es verwendet die Apache POI-Bibliothek, um mit Excel-Dateien zu arbeiten.
@@ -25,24 +19,15 @@ import java.util.List;
  */
 
 public class ExcelReader {
-     /**
-     * Die Hauptmethode des Programms, die die Excel-Daten einliest und ausgibt.
-     *
-     * @param args Die Befehlszeilenargumente (nicht verwendet).
-     */
 
-  
-     /**
-     * Diese Methode liest eine Excel-Datei ein und gibt deren Inhalt als Liste von Zeilen zurück.
+    /**
+     * Diese Methode liest eine Excel-Datei ein und gibt deren Inhalt als Array von String-Arrays zurück.
      *
      * @param filename Der Dateipfad zur Excel-Datei.
-     * @return Eine Liste von Zeilen, wobei jede Zeile eine Liste von Zellenwerten ist.
+     * @return Ein Array von String-Arrays, wobei jedes String-Array eine Zeile in der Excel-Datei darstellt.
      */
-
-
-
-    public static List<List<String>> readExcel(String filename) {
-        List<List<String>> excelData = new ArrayList<>();
+    public static ArrayList<String[]> readExcel(String filename) {
+        ArrayList<String[]> excelData = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(filename);
              Workbook workbook = new XSSFWorkbook(fis)) { // Hier kann auch HSSFWorkbook für .xls-Dateien verwendet werden
             Sheet sheet = workbook.getSheetAt(0);
@@ -53,21 +38,22 @@ public class ExcelReader {
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
-                List<String> rowData = new ArrayList<>();
+                String[] rowData = new String[row.getLastCellNum()];
+                int i = 0;
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next();
                     switch (cell.getCellType()) {
                         case STRING:
-                            rowData.add(cell.getStringCellValue());
+                            rowData[i++] = cell.getStringCellValue();
                             break;
                         case NUMERIC:
-                            rowData.add(Integer.toString((int) cell.getNumericCellValue()));
+                            rowData[i++] = Integer.toString((int) cell.getNumericCellValue());
                             break;
                         case BOOLEAN:
-                            rowData.add(Boolean.toString(cell.getBooleanCellValue()));
+                            rowData[i++] = Boolean.toString(cell.getBooleanCellValue());
                             break;
                         default:
-                            rowData.add("");
+                            rowData[i++] = "";
                             break;
                     }
                 }
