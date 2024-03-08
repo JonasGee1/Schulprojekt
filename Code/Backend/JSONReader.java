@@ -1,4 +1,5 @@
 package Code.Backend;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,7 +12,7 @@ public class JSONReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                line = line.trim().replaceAll("[\\[\\]][{}]", "");
+                line = line.trim().replaceAll("[\\[\\]{}]", "");
                 line = line.replaceAll(",", ",\n");
                 String[] keyValuePairs = line.split(",");
                 for (String pair : keyValuePairs) {
@@ -32,7 +33,6 @@ public class JSONReader {
         return dataList;
     }
 }
-
 /*public class JSONReader {
     public static void readFile(String filePath) {
         // Dateipfad zur JSON-Datei
