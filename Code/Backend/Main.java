@@ -1,10 +1,9 @@
 package Code.Backend;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import Code.Backend.InfoMaxSchuelerList.FeldNummerUndSchueler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     
@@ -13,7 +12,7 @@ public class Main {
         List<Schueler> schueler;
         List<FeldNummerUndSchueler> maxList;
         // Eingabe des Pfades
-        String filePath = "test";
+        String filePath = "T:\\Gruppe2\\StanTest.json";
         // Hier liest der JSONReader aus dem Pfad
         ArrayList<String> data = JSONReader.readJSONFile(filePath);
 
