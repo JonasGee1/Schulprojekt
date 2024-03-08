@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cd41af3b-8b14-463c-8e72-b5a20bf66586" name="Changes" comment="Checkbox bei Zeitangabe implementiert">
+      <change beforePath="$PROJECT_DIR$/Code/Backend/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Code/Backend/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/UI/TeacherComponents.java" beforeDir="false" afterPath="$PROJECT_DIR$/Code/UI/TeacherComponents.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2bo2sdqnQkIFiVevBjRCGhO3Brk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;H:/intelliJ workspace/Schulprojekt&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ide.date.format&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cd41af3b-8b14-463c-8e72-b5a20bf66586" name="Changes" comment="" />
+      <created>1706867318622</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1706867318622</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Test">
+      <created>1706867378064</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706867378064</updated>
+    </task>
+    <task id="LOCAL-00002" summary="WIP Betriebspanel erstellen">
+      <created>1708070338391</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1708070338392</updated>
+    </task>
+    <task id="LOCAL-00003" summary="-Betrieb Panel angelegt&#10;-Buttons hinzugefügt">
+      <created>1708071263673</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1708071263673</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Spate hinzugefügt&#10;&#10;Logik geändert, um selbst Aufruf der Instanzen zu verhindern">
+      <created>1708076338466</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1708076338466</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Spate hinzugefügt&#10;&#10;Logik geändert, um selbst Aufruf der Instanzen zu verhindern">
+      <created>1708076526176</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1708076526176</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Spate hinzugefügt&#10;&#10;Logik geändert, um selbst Aufruf der Instanzen zu verhindern">
+      <created>1708076530670</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1708076530670</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Changed AccessModifier">
+      <created>1708076691577</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1708076691578</updated>
+    </task>
+    <task id="LOCAL-00008" summary="?">
+      <created>1708077676914</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1708077676914</updated>
+    </task>
+    <task id="LOCAL-00009" summary="???">
+      <created>1708077687619</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1708077687619</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Formatting">
+      <created>1709197375950</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1709197375950</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Fix merge error">
+      <created>1709277761831</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1709277761831</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Tabellen umstrukturierung, Checkbox bei Zeitangabe implementiert">
+      <created>1709280394060</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1709280394060</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Checkbox bei Zeitangabe implementiert">
+      <created>1709292485322</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1709292485322</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Test" />
+    <MESSAGE value="WIP Betriebspanel erstellen" />
+    <MESSAGE value="-Betrieb Panel angelegt&#10;-Buttons hinzugefügt" />
+    <MESSAGE value="Spate hinzugefügt&#10;&#10;Logik geändert, um selbst Aufruf der Instanzen zu verhindern" />
+    <MESSAGE value="Changed AccessModifier" />
+    <MESSAGE value="?" />
+    <MESSAGE value="???" />
+    <MESSAGE value="Formatting" />
+    <MESSAGE value="Fix merge error" />
+    <MESSAGE value="Tabellen umstrukturierung, Checkbox bei Zeitangabe implementiert" />
+    <MESSAGE value="Checkbox bei Zeitangabe implementiert" />
+    <option name="LAST_COMMIT_MESSAGE" value="Checkbox bei Zeitangabe implementiert" />
+  </component>
+</project>
