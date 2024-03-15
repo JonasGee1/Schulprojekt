@@ -26,7 +26,19 @@ public class ExcelReader {
      * @param filename Der Dateipfad zur Excel-Datei.
      * @return Ein Array von String-Arrays, wobei jedes String-Array eine Zeile in der Excel-Datei darstellt.
      */
-    public static ArrayList<String[]> readExcel(String filename) {
+
+    //Beispiel main zum Testen
+     /**
+      public static void main(String[] args) {
+      List<List<String>> excelData = readExcel("C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx");
+      // Excel
+      for (List<String> row : excelData) {
+      System.out.println(row);
+      }
+      }
+      */
+
+     public static ArrayList<String[]> readExcel(String filename) {
         ArrayList<String[]> excelData = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(filename);
              Workbook workbook = new XSSFWorkbook(fis)) { // Hier kann auch HSSFWorkbook für .xls-Dateien verwendet werden

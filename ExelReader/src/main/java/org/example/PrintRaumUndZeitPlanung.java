@@ -22,6 +22,21 @@ public class PrintRaumUndZeitPlanung {
      * @param dataList Die Liste der Daten, die in die Excel-Datei geschrieben werden sollen.
      */
 
+    //Beispiel main zum Testen
+     /**
+      public static void main(String[] args) {
+      // Beispielarrayliste erstellen (Nur als Platzhalter)
+      List<List<String>> dataList = new ArrayList<>();
+      dataList.add(Arrays.asList("1", "Zentis", "209", "", "", "", ""));
+      dataList.add(Arrays.asList("2", "Babor Kosmetik", "109", "109", "109", "", ""));
+      dataList.add(Arrays.asList("3", "Aldi", "", "", "108", "108", "108"));
+      dataList.add(Arrays.asList("3", "Bauhaus", "", "112", "", "", ""));
+      dataList.add(Arrays.asList("3", "Sparkasse Aachen", "102", "102", "102", "", ""));
+
+      createExcel(dataList);
+      }
+      */
+
     public static void createExcel(List<List<String>> dataList) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Raum-und Zeitplanung");
