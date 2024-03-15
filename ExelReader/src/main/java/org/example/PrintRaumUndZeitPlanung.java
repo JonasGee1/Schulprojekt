@@ -23,21 +23,21 @@ public class PrintRaumUndZeitPlanung {
      */
 
     //Beispiel main zum Testen
-     /**
-      public static void main(String[] args) {
-      // Beispielarrayliste erstellen (Nur als Platzhalter)
-      List<List<String>> dataList = new ArrayList<>();
-      dataList.add(Arrays.asList("1", "Zentis", "209", "", "", "", ""));
-      dataList.add(Arrays.asList("2", "Babor Kosmetik", "109", "109", "109", "", ""));
-      dataList.add(Arrays.asList("3", "Aldi", "", "", "108", "108", "108"));
-      dataList.add(Arrays.asList("3", "Bauhaus", "", "112", "", "", ""));
-      dataList.add(Arrays.asList("3", "Sparkasse Aachen", "102", "102", "102", "", ""));
+/**
+     public static void main(String[] args) {
+         ArrayList<String[]> dataList = new ArrayList<>();
+         dataList.add(new String[]{"1", "Zentis", "209", "", "", "", ""});
+         dataList.add(new String[]{"2", "Babor Kosmetik", "109", "109", "109", "", ""});
+         dataList.add(new String[]{"3", "Aldi", "", "", "108", "108", "108"});
+         dataList.add(new String[]{"3", "Bauhaus", "", "112", "", "", ""});
+         dataList.add(new String[]{"3", "Sparkasse Aachen", "102", "102", "102", "", ""});
 
-      createExcel(dataList);
-      }
-      */
+         createExcel(dataList);
+     }
 
-    public static void createExcel(List<List<String>> dataList) {
+*/
+
+    public static void createExcel(ArrayList<String[]> dataList) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Raum-und Zeitplanung");
 
@@ -52,7 +52,7 @@ public class PrintRaumUndZeitPlanung {
 
             // Daten aus der ArrayList in Excel übertragen
             int rowNum = 1;
-            for (List<String> rowData : dataList) {
+            for (String[] rowData : dataList) {
                 Row row = sheet.createRow(rowNum++);
                 int colNum = 0;
                 for (String cellData : rowData) {
