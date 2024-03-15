@@ -13,7 +13,7 @@ import java.util.Arrays;
  * @author NickDuecker
  */
 public class PrintKursliste {
-
+/**
     public static void main(String[] args) {
         // Beispiel-ArrayList erstellen
         ArrayList<String[]> dataList = new ArrayList<>();
@@ -24,7 +24,7 @@ public class PrintKursliste {
         // Excel-Datei erstellen
         PrintKursliste.createExcel(dataList);
     }
-
+*/
 
     public static void createExcel(ArrayList<String[]> dataList) {
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -42,7 +42,7 @@ public class PrintKursliste {
             // Daten aus der ArrayList in Excel übertragen
             int rowNum = 1;
             String previousCompanyName = null;
-            boolean companyWritten = false; // Variable, um zu überprüfen, ob die Firmeninformation bereits geschrieben wurde
+            boolean companyWritten = true; // Initial auf true setzen, da noch keine Firmeninformation geschrieben wurde
             for (String[] rowData : dataList) {
                 String companyName = rowData[0]; // Firma aus der aktuellen Zeile holen
                 String students = rowData[3]; // Die Schülerliste aus der aktuellen Zeile holen
@@ -53,6 +53,7 @@ public class PrintKursliste {
                 if (!companyName.equals(previousCompanyName)) {
                     row.createCell(0).setCellValue(companyName); // Firma
                     previousCompanyName = companyName;
+                    companyWritten = true; // Setze companyWritten auf true, da eine neue Firmeninformation geschrieben wurde
                 }
 
                 // Für jeden Schüler eine neue Zeile in der Excel-Tabelle erstellen
@@ -67,7 +68,6 @@ public class PrintKursliste {
                     companyWritten = false;
                 }
             }
-
 
             // Automatische Spaltenanpassung
             for (int i = 0; i < columns.length; i++) {
