@@ -28,15 +28,23 @@ public class ExcelReader {
      */
 
     //Beispiel main zum Testen
-     /**
+/**
       public static void main(String[] args) {
-      List<List<String>> excelData = readExcel("C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx");
-      // Excel
-      for (List<String> row : excelData) {
-      System.out.println(row);
+      // Geben Sie den Dateipfad zur Excel-Datei an
+      String filename = "C:/Users/Nick/IdeaProjects/Schulprojekt/ExelReader/src/main/resources/BetriebeExcel.xlsx";
+
+      // Aufruf der Methode readExcel aus der ExcelReader-Klasse
+      ArrayList<String[]> excelData = ExcelReader.readExcel(filename);
+
+      // Ausgabe der gelesenen Daten (als Beispiel)
+      for (String[] row : excelData) {
+      for (String cell : row) {
+      System.out.print(cell + "\t");
+      }
+      System.out.println(); // Neue Zeile für jede Excel-Zeile
       }
       }
-      */
+*/
 
      public static ArrayList<String[]> readExcel(String filename) {
         ArrayList<String[]> excelData = new ArrayList<>();
