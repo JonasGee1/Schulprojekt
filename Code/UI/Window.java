@@ -2,15 +2,21 @@ package Code.UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Window extends JFrame {
     private ArrayList<String> companies = new ArrayList<>();
     private ArrayList<Object[]> studentsList = new ArrayList<>();
     private JPanel buttonsPanel;
-    private String studentsListFilePath = "";
+    private File FileRaumListe;
+    private File FileWahlen;
+    private File FileVeranstaltungen;
+
 
     public void create() {
         this.addCompany("Polizei");
@@ -36,59 +42,109 @@ public class Window extends JFrame {
         this.setLayout(new GridBagLayout());
         this.add(this.buttonsPanel, new GridBagConstraints());
 
-        this.setSize(300, 150);
+        this.setSize(600, 300);
         this.setVisible(true);
 
-        // Füge einen WindowListener hinzu, um das Programm zu beenden, wenn das Fenster geschlossen wird
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Aufruf der Methode zum Beenden des Programms
                 closeWindow();
             }
         });
     }
 
+    private void setFileRaumListe(File file){
+        this.FileRaumListe = file;
+    }
+
+    private void setFileWahlen(File file){
+        this.FileWahlen = file;
+    }
+
+    private void setFileVeranstaltungen(File file){
+        this.FileVeranstaltungen = file;
+    }
+
+
+
     private JPanel createButtons() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        buttonPanel.add(this.createTeacherButton());
-        buttonPanel.add(this.createCompanyButton());
-        buttonPanel.add(this.createCloseButton());
+        ActionListener raumListeCallback = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setFileRaumListe(((LabeledButton) e.getSource()).getFile());
+            }
+        };
+
+        ActionListener wahlenListeCallback = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setFileWahlen(((LabeledButton) e.getSource()).getFile());
+            }
+        };
+
+        ActionListener veranstaltungenListeCallback = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setFileVeranstaltungen(((LabeledButton) e.getSource()).getFile());
+            }
+        };
+
+        buttonPanel.add(createLabeledButton("Raumliste importieren", "", this.FileRaumListe, 1, raumListeCallback));
+        buttonPanel.add(createLabeledButton("Wahlen importieren", "", this.FileWahlen, 2, wahlenListeCallback));
+        buttonPanel.add(createLabeledButton("Veranstaltungen importieren", "", this.FileVeranstaltungen, 3, veranstaltungenListeCallback));
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        JPanel createButtonsPanel = new JPanel();
+        createButtonsPanel.setLayout(new GridLayout(0, 1));
+        buttonPanel.add(createButtonsPanel);
+
+        createButtonsPanel.add(createButton("Laufzettel erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
+        createButtonsPanel.add(createButton("Anwesenheitsliste erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
+        createButtonsPanel.add(createButton("Raum und Zeitplaung erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
+
+
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        JPanel closeButtonPanel = new JPanel();
+        closeButtonPanel.setLayout(new GridLayout(0, 1));
+        buttonPanel.add(closeButtonPanel);
+
+        closeButtonPanel.add(this.createCloseButton());
 
         return buttonPanel;
     }
 
-    private JButton createTeacherButton() {
-        JButton teacherButton = new JButton("Lehrer");
-        teacherButton.addActionListener(event -> {
-            this.removeAllComponents();
-                TeacherComponents teacherComponents = new TeacherComponents(this.companies, this, this.studentsList, this.studentsListFilePath);
+    private LabeledButton createLabeledButton(String buttonText, String label, File file, int index, ActionListener callBack) {
+        LabeledButton labeledButton = new LabeledButton(buttonText, label, file, callBack);
+        labeledButton.getButton().addActionListener(e -> {
+            File selectedFile = labeledButton.getFile();
+            if (index == 1) {
+                this.FileRaumListe = selectedFile;
+            } else if (index == 2) {
+                this.FileWahlen = selectedFile;
+            } else if (index == 3) {
+                this.FileVeranstaltungen = selectedFile;
+            }
         });
-        return teacherButton;
+        return labeledButton;
     }
 
-    private JButton createCompanyButton() {
-        JButton companyButton = new JButton("Betrieb");
-        companyButton.addActionListener(event -> {
-            this.removeAllComponents();
-            CompanyComponents companyComponents = new CompanyComponents(this);
-        });
-        return companyButton;
+    private JButton createButton(String text, ActionListener actionListener) {
+
+        JButton button = new JButton(text);
+        button.addActionListener(actionListener);
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getPreferredSize().height));
+        return button;
     }
 
     private JButton createCloseButton() {
         JButton closeButton = new JButton("Beenden");
         closeButton.addActionListener(e -> closeWindow());
         return closeButton;
-    }
-
-    private void removeAllComponents() {
-        this.remove(this.buttonsPanel);
-        this.revalidate();
-        this.repaint();
-        this.setSize(1000, 500);
     }
 
     private void addCompany(String company) {
@@ -103,9 +159,5 @@ public class Window extends JFrame {
     private void closeWindow() {
         // Beenden des Programms
         System.exit(0);
-    }
-
-    public void setStudentsListFilePath(String filePath){
-        this.studentsListFilePath = filePath;
     }
 }
