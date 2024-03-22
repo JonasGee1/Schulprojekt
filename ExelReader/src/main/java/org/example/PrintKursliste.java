@@ -20,6 +20,14 @@ public class PrintKursliste {
         dataList.add(new String[]{"Zentis", "209", "A", "Max Mustermann, Lisa Schmidt, Kevin, John-Paul"});
         dataList.add(new String[]{"Zentis", "209", "B", "Hans Müller, Müller Hans"});
         dataList.add(new String[]{"Zentis", "209", "C", "Anna Meier, Peter Schmitt"});
+        dataList.add(new String[]{"Zentis", "209", "D", "Anna Meier, Peter Schmitt"});
+        dataList.add(new String[]{"Zentis", "209", "E", "Anna Meier, Peter Schmitt"});
+        dataList.add(new String[]{"Koppa", "209", "A", "Max Mustermann, Lisa Schmidt, Kevin, John-Paul"});
+        dataList.add(new String[]{"Koppa", "209", "B", "Hans Müller, Müller Hans"});
+        dataList.add(new String[]{"Koppa", "209", "C", "Anna Meier, Peter Schmitt"});
+        dataList.add(new String[]{"Koppa", "209", "D", "Anna Meier, Peter Schmitt"});
+        dataList.add(new String[]{"Koppa", "209", "E", "Anna Meier, Peter Schmitt"});
+
 
         // Excel-Datei erstellen
         PrintKursliste.createExcel(dataList);
@@ -51,6 +59,7 @@ public class PrintKursliste {
                 // Firmeninformation nur einmal ausgeben
                 Row row = sheet.createRow(rowNum++);
                 if (!companyName.equals(previousCompanyName)) {
+                    row = sheet.createRow(rowNum++);
                     row.createCell(0).setCellValue(companyName); // Firma
                     previousCompanyName = companyName;
                     companyWritten = true; // Setze companyWritten auf true, da eine neue Firmeninformation geschrieben wurde
@@ -67,6 +76,7 @@ public class PrintKursliste {
                     row.createCell(4); // Leer für Unterschrift
                     companyWritten = false;
                 }
+
             }
 
             // Automatische Spaltenanpassung
