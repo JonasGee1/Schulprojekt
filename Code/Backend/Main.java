@@ -91,52 +91,92 @@ public class Main {
         while(raumlisteFile.size() > k) {
             String[] raum = raumlisteFile.get(k);
 
-                Veranstaltung v = new Veranstaltung();
+            Veranstaltung v = new Veranstaltung();
+
+            while (veranstaltungsliste.getCompanies().size() > i) {
+                if (veranstaltungsliste.getCompanies().size() == i) {
+                    i = 0;
+                    break;
+                }
+                Company c = veranstaltungsliste.getCompanies().get(i);
+
+
+                v.setId(c.getId());
+                v.setFirmenName(c.getName());
+
+
+                int anzahl = c.getCount();
+                int raumPos = 0;
+                boolean anzahlPasst = false;
+                int schuelerNummer = 0;
+                if (c.getCount() > Integer.parseInt(raum[1])) {
+                    //Nicht alle Leute passen in einen Raum
+
+
+                    while (!anzahlPasst) {
+
+                        v.setRaum(raumPos, raum[0]);
 
 
 
-                while (veranstaltungsliste.getCompanies().size() > i) {
-                    if (veranstaltungsliste.getCompanies().size() == i) {
-                        i = 0;
-                        break;
-                    }
-                    Company c = veranstaltungsliste.getCompanies().get(i);
+                        //v.getRaumplan().addSchueler();
 
 
-                    v.setId(c.getId());
-                    v.setFirmenName(c.getName());
-
-
-                    int anzahl = c.getCount();
-                    int raumPos = 0;
-                    boolean anzahlPasst = false;
-
-                    if (c.getCount() > Integer.parseInt(raum[1])) {
-                        //Nicht alle Leute passen in einen Raum
-
-                        while (!anzahlPasst) {
-                            v.setRaum(raumPos, raum[0]);
-                            if (anzahl <= Integer.parseInt(raum[1])) {
-                                anzahlPasst = true;
-                                break;
-                            }
-                            raumPos++;
-                            anzahl = anzahl - Integer.parseInt(raum[1]);
+                        if (anzahl <= Integer.parseInt(raum[1])) {
+                            anzahlPasst = true;
+                            break;
                         }
+                        raumPos++;
+                        anzahl = anzahl - Integer.parseInt(raum[1]);
+                    }
 
-                    } else {
-                        //Alle Leute passen in einen Raum
-                        v.setRaum(0, raum[0]);
-                        anzahlPasst = true;
+                    ArrayList<String> schuelernamen = new ArrayList<>();
+                    for(int j = 1; j <= c.getCount(); j++){
+                        if(j % Integer.parseInt(raum[1]) != 0){
+                            schuelernamen.add(c.getStudentsName().get(j-1));
+                        } else {
+                            if(schuelernamen.size() > 0){
+                                schuelernamen.add(c.getStudentsName().get(j-1));
+                                v.getRaumplan().addSchueler(schuelernamen);
+                            }
+                            schuelernamen = new ArrayList<>();
+                        }
                     }
-                    if (anzahlPasst) {
-                        i++;
-                        break;
+                    v.getRaumplan().addSchueler(schuelernamen);
+
+                } else {
+                    //Alle Leute passen in einen Raum
+                    v.setRaum(0, raum[0]);
+
+                    ArrayList<String> schuelernamen = new ArrayList<>();
+                    for(int j = 1; j <= c.getCount(); j++){
+                        if(j % Integer.parseInt(raum[1]) != 0){
+                            schuelernamen.add(c.getStudentsName().get(j-1));
+                        } else {
+                            if(schuelernamen.size() > 0){
+                                schuelernamen.add(c.getStudentsName().get(j-1));
+                                v.getRaumplan().addSchueler(schuelernamen);
+                            }
+
+                            schuelernamen = new ArrayList<>();
+                        }
                     }
+                    v.getRaumplan().addSchueler(schuelernamen);
+
+
+
+
+
+                    anzahlPasst = true;
                 }
-                if(v.getFirmenName() != null){
-                    verteilung.add(v);
+                if (anzahlPasst) {
+                    i++;
+                    break;
                 }
+            }
+            if(v.getFirmenName() != null){
+                verteilung.add(v);
+            }
 
                 //Jetzt müssen die Räume aufgeteilt werden
             k++;
@@ -150,7 +190,8 @@ public class Main {
 
         System.out.println("------------");
         for(Veranstaltung v : verteilung){
-            v.printVeranstaltung();
+            String a = v.toString();
+            System.out.println(a);
         }
         System.out.println("------------");
 
