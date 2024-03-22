@@ -46,43 +46,116 @@ public class Main {
 
 
 
-        ArrayList<String[]> veranstaltungsListe = ExcelReader.readExcel("H:/Projekt/IMPORT BOT1_Veranstaltungsliste.xlsx");
-        ArrayList<String[]> wahlen = ExcelReader.readExcel("H:/Projekt/IMPORT BOT2_Wahl.xlsx");
+        ArrayList<String[]> veranstaltungenFile = ExcelReader.readExcel("H:/Projekt/IMPORT BOT1_Veranstaltungsliste.xlsx");
+        ArrayList<String[]> wahlenFile = ExcelReader.readExcel("H:/Projekt/IMPORT BOT2_Wahl.xlsx");
 
 
         Veranstaltungsliste veranstaltungsliste = new Veranstaltungsliste();
-        int[] teilnehmerZahl = new int[veranstaltungsListe.size()];
+        int[] teilnehmerZahl = new int[veranstaltungenFile.size()];
 
 
-        for(String[] veranstaltung : veranstaltungsListe){
+        for(String[] veranstaltung : veranstaltungenFile){
             Company c = new Company();
             c.setName(veranstaltung[1]);
             c.setId(Integer.parseInt(veranstaltung[0]));
             veranstaltungsliste.addCompany(c);
         }
 
-        for(String[] wahlRow : wahlen){
+        for(String[] wahlRow : wahlenFile){
             for(int i = 3; i < wahlRow.length - 1; i++){ //Wahl 6 wird erstmal ignoriert
                 for(int k = 0; k < veranstaltungsliste.getCompanies().size(); k++){
                     if(veranstaltungsliste.getCompanies().get(k).getId() == Integer.parseInt(wahlRow[i])){
-                        veranstaltungsliste.getCompanies().get(k).addStudent(wahlRow[1]);
+                        veranstaltungsliste.getCompanies().get(k).addStudent(wahlRow[1], wahlRow[0]);
                     }
                 }
             }
         }
 
-        ArrayList<String[]> raumliste = ExcelReader.readExcel("H:/Projekt/IMPORT BOT0_Raumliste.xlsx"); //Stelle: 0 = Raum; Stelle: 1 = Kapazität
+        ArrayList<String[]> raumlisteFile = ExcelReader.readExcel("H:/Projekt/IMPORT BOT0_Raumliste.xlsx"); //Stelle: 0 = Raum; Stelle: 1 = Kapazität
 
         veranstaltungsliste.sortCompaniesBySize();
         veranstaltungsliste.printList();
 
+
+
+        sortRoomListByCapacity(raumlisteFile);
+
+
+
         // ArrayList<String[]> {"id", "Name", "Raum", "Raum", "Raum", "Raum, "Raum"}
+        ArrayList<Veranstaltung> verteilung = new ArrayList<>();
 
-        sortRoomListByCapacity(raumliste);
+        int i = 0;
+        int k = 0;
+        int companyCount = 0;
+        while(raumlisteFile.size() > k) {
+            String[] raum = raumlisteFile.get(k);
 
-        ArrayList<String[]> verteilung = new ArrayList<>();
+                Veranstaltung v = new Veranstaltung();
 
-        for(Company c : veranstaltungsliste.getCompanies()){
+
+
+                while (veranstaltungsliste.getCompanies().size() > i) {
+                    if (veranstaltungsliste.getCompanies().size() == i) {
+                        i = 0;
+                        break;
+                    }
+                    Company c = veranstaltungsliste.getCompanies().get(i);
+
+
+                    v.setId(c.getId());
+                    v.setFirmenName(c.getName());
+
+
+                    int anzahl = c.getCount();
+                    int raumPos = 0;
+                    boolean anzahlPasst = false;
+
+                    if (c.getCount() > Integer.parseInt(raum[1])) {
+                        //Nicht alle Leute passen in einen Raum
+
+                        while (!anzahlPasst) {
+                            v.setRaum(raumPos, raum[0]);
+                            if (anzahl <= Integer.parseInt(raum[1])) {
+                                anzahlPasst = true;
+                                break;
+                            }
+                            raumPos++;
+                            anzahl = anzahl - Integer.parseInt(raum[1]);
+                        }
+
+                    } else {
+                        //Alle Leute passen in einen Raum
+                        v.setRaum(0, raum[0]);
+                        anzahlPasst = true;
+                    }
+                    if (anzahlPasst) {
+                        i++;
+                        break;
+                    }
+                }
+                if(v.getFirmenName() != null){
+                    verteilung.add(v);
+                }
+
+                //Jetzt müssen die Räume aufgeteilt werden
+            k++;
+            companyCount++;
+            if((raumlisteFile.size() == k) && (veranstaltungsliste.getCompanies().size() >= companyCount)){
+                k = 0;
+            }
+        }
+
+
+
+        System.out.println("------------");
+        for(Veranstaltung v : verteilung){
+            v.printVeranstaltung();
+        }
+        System.out.println("------------");
+
+
+        /*for(Company c : veranstaltungsliste.getCompanies()){
             String[] besetzung = new String[7];
             besetzung[0] = String.valueOf(c.getId());
             besetzung[1] = c.getName();
@@ -96,22 +169,16 @@ public class Main {
 
 
 
-            verteilung.add(besetzung);
+            //verteilung.add(besetzung);
             //System.out.print(raumliste.get(0)[1]);
             //System.out.println(c.getName());
         }
+        */
 
-        System.out.println("------------");
 
 
-        for(String[] t : verteilung){
-            for(String a : t){
-                System.out.print(a + ", ");
-            }
-            System.out.println("");
-        }
 
-        System.out.println("------------");
+
     }
 
 

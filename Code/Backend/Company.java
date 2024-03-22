@@ -11,12 +11,12 @@ public class Company {
     public String getString(){
         return "Id: " + this.id + ", Name: " + this.name + ", Anzahl: " + this.count + ", Schülernamen: " + this.studentNames;
     }
-    private void addStudentName(String studentName){
-        this.studentNames.add(studentName);
+    private void addStudentName(String studentName, String klasse){
+        this.studentNames.add(studentName + " " + klasse);
     }
 
-    public void addStudent(String studentName){
-        this.addStudentName(studentName);
+    public void addStudent(String studentName, String klasse){
+        this.addStudentName(studentName, klasse);
         this.count++;
     }
 
