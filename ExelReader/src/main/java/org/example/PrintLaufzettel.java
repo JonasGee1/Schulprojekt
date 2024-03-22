@@ -6,7 +6,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * Klasse zum Erstellen einer Excel-Datei für die Laufzettel.
+ *
+ * @author NickDuecker
+ */
 public class PrintLaufzettel {
 /**
     public static void main(String[] args) {
@@ -17,10 +21,12 @@ public class PrintLaufzettel {
         dataList.add(new String[]{"ASS231", "Schmitz", "Kevin", "103", "Finanzamt", "104", "Finanzamt2", "102", "Aachener Sparkasse", "102", "Justizvollzugsanstalt", "107", "Debeka"});
         dataList.add(new String[]{"ASS231", "Mustermann", "Max", "103", "Finanzamt", "104", "Finanzamt2", "102", "Aachener Sparkasse", "102", "Justizvollzugsanstalt", "107", "Debeka"});
 
-        writeDataToExcel(dataList, "output.xlsx");
+        createExcel(dataList);
     }
 */
-    public static void writeDataToExcel(ArrayList<String[]> dataList, String fileName) {
+    public static void createExcel(ArrayList<String[]> dataList) {
+
+
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Veranstaltungen");
 
@@ -57,9 +63,9 @@ public class PrintLaufzettel {
             }
 
             // Excel-Datei speichern
-            try (FileOutputStream fileOut = new FileOutputStream(fileName)) {
-                workbook.write(fileOut);
-                System.out.println("Excel-Datei wurde erfolgreich erstellt: " + fileName);
+            try (FileOutputStream outputStream = new FileOutputStream("Laufzettel.xlsx")) {
+                workbook.write(outputStream);
+                System.out.println("Excel-Datei erfolgreich erstellt.");
             }
 
         } catch (IOException e) {
