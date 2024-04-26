@@ -1,5 +1,7 @@
 package Code.UI;
 
+import Code.Backend.ListCreator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,8 +16,11 @@ public class Window extends JFrame {
     private ArrayList<Object[]> studentsList = new ArrayList<>();
     private JPanel buttonsPanel;
     private File FileRaumListe;
+    private String filepathRaumListe;
     private File FileWahlen;
+    private String filepathWahlen;
     private File FileVeranstaltungen;
+    private String filepathVeranstaltungen;
 
 
     public void create() {
@@ -64,6 +69,13 @@ public class Window extends JFrame {
     private void setFileVeranstaltungen(File file){
         this.FileVeranstaltungen = file;
     }
+    private void setFilepathRaumListe(String filepath){ this.filepathRaumListe = filepath;}
+    private void setFilepathWahlen(String filepath){ this.filepathWahlen = filepath;}
+    private void setFilepathVeranstaltungen(String filepath){ this.filepathVeranstaltungen = filepath;}
+
+    private String getFilepathRaumListe(){ return this.filepathRaumListe;}
+    private String getFilepathVeranstaltungen(){ return this.filepathVeranstaltungen;}
+    private String getFilepathWahlen(){ return this.filepathWahlen;}
 
 
 
@@ -74,21 +86,24 @@ public class Window extends JFrame {
         ActionListener raumListeCallback = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setFileRaumListe(((LabeledButton) e.getSource()).getFile());
+                //setFileRaumListe(((LabeledButton) e.getSource()).getFile());
+                setFilepathRaumListe(((LabeledButton) e.getSource()).getFile().getAbsolutePath());
             }
         };
 
         ActionListener wahlenListeCallback = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setFileWahlen(((LabeledButton) e.getSource()).getFile());
+                //setFileWahlen(((LabeledButton) e.getSource()).getFile());
+                setFilepathWahlen(((LabeledButton) e.getSource()).getFile().getAbsolutePath());
             }
         };
 
         ActionListener veranstaltungenListeCallback = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setFileVeranstaltungen(((LabeledButton) e.getSource()).getFile());
+                //setFileVeranstaltungen(((LabeledButton) e.getSource()).getFile());
+                setFilepathVeranstaltungen(((LabeledButton) e.getSource()).getFile().getAbsolutePath());
             }
         };
 
@@ -102,9 +117,11 @@ public class Window extends JFrame {
         createButtonsPanel.setLayout(new GridLayout(0, 1));
         buttonPanel.add(createButtonsPanel);
 
-        createButtonsPanel.add(createButton("Laufzettel erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
-        createButtonsPanel.add(createButton("Anwesenheitsliste erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
-        createButtonsPanel.add(createButton("Raum und Zeitplaung erstellen", e -> System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath())));
+        createButtonsPanel.add(createButton("Zettel erstellen", e -> {
+            ListCreator.createLists(this.getFilepathVeranstaltungen(), this.getFilepathWahlen());
+
+            //System.out.println(this.FileRaumListe.getAbsolutePath() + "\n" + this.FileVeranstaltungen.getAbsolutePath() + "\n" + this.FileWahlen.getAbsolutePath());
+        }));
 
 
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));

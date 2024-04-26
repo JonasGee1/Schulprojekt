@@ -36,4 +36,24 @@ public class Raumplan {
         }
         return t;
     }
+
+    public String printSchuelerNamen(){
+        String t = "";
+        for(ArrayList<String> s: this.schuelernamen){
+            for(String name : s){
+                t += name + ", ";
+            }
+            t += ", ";
+        }
+        return t;
+    }
+
+    public String printRaeume(){
+        return this.raumName.get(0);
+        /*String t = "";
+        for(String r : this.raumName){
+            t += r + ", ";
+        }
+        return t;*/
+    }
 }

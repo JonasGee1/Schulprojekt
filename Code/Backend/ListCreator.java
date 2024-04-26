@@ -1,12 +1,13 @@
 package Code.Backend;
 
 import ExelReader.src.main.java.org.example.ExcelReader;
+import ExelReader.src.main.java.org.example.PrintKursliste;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Main {
+public class ListCreator {
     
     public static void main(String[] args) {
 /*
@@ -46,8 +47,17 @@ public class Main {
 
 
 
+
+    }
+
+    public static void createLists(String veranstaltungenFilepath, String wahlenFillepath){
+        /*
         ArrayList<String[]> veranstaltungenFile = ExcelReader.readExcel("H:/Projekt/IMPORT BOT1_Veranstaltungsliste.xlsx");
         ArrayList<String[]> wahlenFile = ExcelReader.readExcel("H:/Projekt/IMPORT BOT2_Wahl.xlsx");
+         */
+
+        ArrayList<String[]> veranstaltungenFile = ExcelReader.readExcel(veranstaltungenFilepath);
+        ArrayList<String[]> wahlenFile = ExcelReader.readExcel(wahlenFillepath);
 
 
         Veranstaltungsliste veranstaltungsliste = new Veranstaltungsliste();
@@ -178,7 +188,7 @@ public class Main {
                 verteilung.add(v);
             }
 
-                //Jetzt müssen die Räume aufgeteilt werden
+            //Jetzt müssen die Räume aufgeteilt werden
             k++;
             companyCount++;
             if((raumlisteFile.size() == k) && (veranstaltungsliste.getCompanies().size() >= companyCount)){
@@ -215,10 +225,12 @@ public class Main {
             //System.out.println(c.getName());
         }
         */
+        ArrayList<String[]> convertedVerteilung = new ArrayList<>();
+        for(Veranstaltung v : verteilung){
+            convertedVerteilung.add(v.convertToStringArray());
+        }
 
-
-
-
+        PrintKursliste.createExcel(convertedVerteilung);
 
     }
 
